@@ -1,8 +1,8 @@
-h1. Arch Linux - Macbook Pro 9.2 (2012)
+# Arch Linux - Macbook Pro 9.2 (2012)
 
-h2. Preparations
+## Preparations
 
-h3. USB (OSX)
+### USB (OSX)
 
 Download iso and put it on a usb stick.
 
@@ -12,7 +12,7 @@ Download iso and put it on a usb stick.
 
 Boot to USB.
 
-h3. PARTITION
+### PARTITION
 
 Partition disk. For EFI partition, set the size to 512M and type ef00.
 
@@ -29,9 +29,9 @@ Mount partitions.
     mkdir /mnt/boot
     mount /dev/sda2 /mnt/boot
 
-h2. Install
+## Install
 
-h3. Configure base system
+### Configure base system
 
 Edit the mirror list */etc/pacman.d/mirrorlist*.
 
@@ -69,7 +69,7 @@ Create user. Use _visudo_ to make any sudo changes for the new user.
     useradd -m -G wheel -s /bin/bash nripoll
     passwd nripoll
 
-h3. Boot partition (Gummiboot)
+### Boot partition (Gummiboot)
 
 Install *gummiboot*.
 
@@ -90,9 +90,9 @@ Edit */boot/loader/loader.conf*.
 
 Exit and unmount partitions.
 
-h2. Post Installation
+## Post Installation
 
-h3. Wireless
+### Wireless
 
 Install *b43-fwcutter*, *iw*, and *wpa_supplicant*. 
 
@@ -138,7 +138,7 @@ Enable new systemd service.
     systemctl start network-wireless@wlan0.service
 
 
-h3. Display
+### Display
 
 When installing xorg, omit all the video packages (^9-34)
 
