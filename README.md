@@ -64,14 +64,14 @@ Create initial ramdisk environment.
 
     mkinitcpio -p linux
 
-Create user. Use _visudo_ to make any sudo changes for the new user.
+Create user. Use **visudo** to make any sudo changes for the new user.
 
     useradd -m -G wheel -s /bin/bash nripoll
     passwd nripoll
 
 ### Boot partition (Gummiboot)
 
-Install *gummiboot*.
+Install **gummiboot**.
 
     pacman -S gummiboot 
     /usr/bin/gummiboot --path=/boot install
@@ -94,7 +94,7 @@ Exit and unmount partitions.
 
 ### Wireless
 
-Install *b43-fwcutter*, *iw*, and *wpa_supplicant*. 
+Install **b43-fwcutter**, **iw**, and **wpa_supplicant**. 
 
     pacman -S b43-fwcutter iw wpa_supplicant
 
@@ -105,7 +105,7 @@ Download and install broadcom drivers.
     tar xjf broadcom-wl-6.30.163.46.tar.bz2
     sudo b43-fwcutter -w "/lib/firmware" broadcom-wl-6.30.163.46.wl_apsta.o
 
-Use _wpa_passphrase_ to create the wpa_supplicant conf file.
+Use **wpa_passphrase** to create the wpa_supplicant conf file.
 Make sure it gets properly formatted afterwards.
 
     echo $(wpa_passphrase ssid passphrase) > /etc/wpa_supplicant/wifi.conf
@@ -144,7 +144,7 @@ When installing xorg, omit all the video packages (^9-34)
 
     pacman -S xorg xorg-xinit xorg-xdm nvidia xf86-input-synaptics abs dmenu qiv rxvt-unicode
 
-Copy skeleton *.xinitrc* and *.xsession* files. 
+Copy skeleton files for xorg. 
 
     cp /etc/skel/.xinitrc /etc/skel/.xsession ~/
     chmod 744 ~/.xinitrc ~/.xsession
@@ -169,4 +169,4 @@ Make any custom changes to *~/dwm/config.h* and rebuild.
     makepkg -efi
 
 Edit */etc/X11/xdm/Xsetup_0* to configure xdm. Add wallpapers to */usr/local/share/wallpapers*.
-Make sure you add *exec dwm* to ~/.xinitrc
+Make sure you add **exec dwm** to *~/.xinitrc*.
