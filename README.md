@@ -12,7 +12,7 @@ Download iso and put it on a usb stick.
 
 Boot to USB.
 
-### PARTITION
+### Partition
 
 Partition disk. For EFI partition, set the size to 512M and type ef00.
 
@@ -25,9 +25,9 @@ Format linux partition as ext4 and efi partition as fat 32.
 
 Mount partitions.
 
-    mount /dev/sda1 /mnt
+    mount /dev/sdaX /mnt
     mkdir /mnt/boot
-    mount /dev/sda2 /mnt/boot
+    mount /dev/sdaX /mnt/boot
 
 ## Install
 
@@ -38,7 +38,7 @@ Edit the mirror list */etc/pacman.d/mirrorlist*.
     pacstrap -i /mnt base base-devel
     genfstab -U -p /mnt >> /mnt/etc/fstab
 
-Chroot into */mnt/*.
+Chroot into */mnt*.
 
     arch-chroot /mnt /bin/bash
 
@@ -69,7 +69,7 @@ Create user. Use **visudo** to make any sudo changes for the new user.
     useradd -m -G wheel -s /bin/bash nripoll
     passwd nripoll
 
-### Boot partition (Gummiboot)
+### Configure boot partition
 
 Install **gummiboot**.
 
@@ -110,27 +110,7 @@ Make sure it gets properly formatted afterwards.
 
     echo $(wpa_passphrase ssid passphrase) > /etc/wpa_supplicant/wifi.conf
 
-Create */etc/systemd/system/network-wireless@.service*.
-
-    [Unit]
-    Description=Wireless network connectivity (%i)
-    Wants=network.target
-    Before=network.target
-    BindsTo=sys-subsystem-net-devices-%i.device
-    After=sys-subsystem-net-devices-%i.device
-    
-    [Service]
-    Type=oneshot
-    RemainAfterExit=yes
-    
-    ExecStart=/usr/bin/ip link set dev %i up
-    ExecStart=/usr/bin/wpa_supplicant -B -i %i -c /etc/wpa_supplicant/wifi.conf
-    ExecStart=/usr/bin/dhcpcd %i
-    
-    ExecStop=/usr/bin/ip link set dev %i down
-    
-    [Install]
-    WantedBy=multi-user.target
+Save systemd wireless file at */etc/systemd/system/network-wireless@.service*.
 
 Enable new systemd service.
 
@@ -140,9 +120,7 @@ Enable new systemd service.
 
 ### Display
 
-When installing xorg, omit all the video packages (^9-34)
-
-    pacman -S xorg xorg-xinit xorg-xdm nvidia xf86-input-synaptics abs dmenu qiv rxvt-unicode
+    pacman -S xorg xorg-xinit xorg-xdm xorg-xdpyinfo xcursor-themes nvidia xf86-input-synaptics abs dmenu qiv rxvt-unicode 
 
 Copy skeleton files for xorg. 
 
@@ -170,9 +148,8 @@ Make any custom changes to *~/dwm/config.h* and rebuild.
     makepkg -efi
 
 Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers. 
-Add wallpapers to */usr/local/share/wallpapers*.
 
     /usr/bin/qiv -zr /usr/local/share/wallpapers/*
 
-Edit */etc/X11/xdm/Xresources* to customize xdm.
-Make sure you add **exec dwm** to *~/.xinitrc*.
+Add wallpapers to */usr/local/share/wallpapers*.
+Add **exec dwm** to *~/.xinitrc*.
