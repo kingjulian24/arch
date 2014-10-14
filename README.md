@@ -134,8 +134,8 @@ Create */etc/systemd/system/network-wireless@.service*.
 
 Enable new systemd service.
 
-    systemctl enable network-wireless@wlan0.service
-    systemctl start network-wireless@wlan0.service
+    systemctl enable network-wireless@wlp3s0.service
+    systemctl start network-wireless@wlp3s0.service
 
 
 ### Display
@@ -165,8 +165,14 @@ Initial dwm setup.
     makepkg -i
 
 Make any custom changes to *~/dwm/config.h* and rebuild.
+
     makepkg -g >> PKGBUILD
     makepkg -efi
 
-Edit */etc/X11/xdm/Xsetup_0* to configure xdm. Add wallpapers to */usr/local/share/wallpapers*.
+Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers. 
+Add wallpapers to */usr/local/share/wallpapers*.
+
+    /usr/bin/qiv -zr /usr/local/share/wallpapers/*
+
+Edit */etc/X11/xdm/Xresources* to customize xdm.
 Make sure you add **exec dwm** to *~/.xinitrc*.
