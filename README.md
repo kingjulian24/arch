@@ -153,3 +153,17 @@ Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers.
 
 Add wallpapers to */usr/local/share/wallpapers*.
 Add **exec dwm** to *~/.xinitrc*.
+
+### Browser
+
+Download and install Google Chrome from the AUR.
+
+    curl -L -O https://aur.archlinux.org/packages/go/google-chrome/google-chrome.tar.gz
+    tar -xvf google-chrome.tar.gz
+    cd google-chrome
+    makepkg -s
+    pacman -U google-chrome-XXXXXX-x86_64.pkg.tar.xz
+
+### Battery
+
+    pacman -S acpi
