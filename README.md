@@ -75,42 +75,12 @@ Create user. Use **visudo** to make any sudo changes for the new user.
     useradd -m -G wheel -s /bin/bash nripoll
     passwd nripoll
 
-#### Ramdisk
 
-Create initial ramdisk environment.
-
-    mkinitcpio -p linux
-
-
-
-### Configure boot partition
-
-Install **gummiboot**.
-
-    pacman -S gummiboot 
-    /usr/bin/gummiboot --path=/boot install
-
-Create */boot/loader/entries/arch.conf*.
-
-    title          Arch Linux
-    linux          /vmlinuz-linux
-    initrd         /initramfs-linux.img
-    options        root=/dev/sda2 rw
-
-Edit */boot/loader/loader.conf*.
-
-    default  arch
-    timeout  5
-
-Exit and unmount partitions.
-
-### Battery
+#### Battery
 
     pacman -S acpi
 
-## Post Installation
-
-### Wireless
+#### Wireless
 
 Install **b43-fwcutter**, **iw**, and **wpa_supplicant**. 
 
@@ -133,8 +103,35 @@ Save systemd wireless file at */etc/systemd/system/network-wireless@.service*.
 Enable new systemd service.
 
     systemctl enable network-wireless@wlp3s0.service
-    systemctl start network-wireless@wlp3s0.service
 
+#### Configure boot partition
+
+Install **gummiboot**.
+
+    pacman -S gummiboot 
+    /usr/bin/gummiboot --path=/boot install
+
+Create */boot/loader/entries/arch.conf*.
+
+    title          Arch Linux
+    linux          /vmlinuz-linux
+    initrd         /initramfs-linux.img
+    options        root=/dev/sda2 rw
+
+Edit */boot/loader/loader.conf*.
+
+    default  arch
+    timeout  5
+
+Exit and unmount partitions.
+
+#### Ramdisk
+
+Create initial ramdisk environment.
+
+    mkinitcpio -p linux
+
+## Post Installation
 
 ### Display
 
@@ -143,12 +140,12 @@ Enable new systemd service.
 The 9.1 Macbook Pro has an nvidia driver for linux.
 
     curl -O -L http://us.download.nvidia.com/XFree86/Linux-x86_64/340.46/NVIDIA-Linux-x86_64-340.46.run
-		sh NVIDIA-Linux-x86_64-340.46.run
+    sh NVIDIA-Linux-x86_64-340.46.run
 
 #### Xorg
 
     pacman -S xorg xorg-xdm qiv
-		pacman -S xorg-xinit xorg-xdpyinfo
+    pacman -S xorg-xinit xorg-xdpyinfo
 	
 Copy skeleton files for xorg. 
 
@@ -195,6 +192,3 @@ Download and install Google Chrome from the AUR.
     cd google-chrome
     makepkg -s
     pacman -U google-chrome-XXXXXX-x86_64.pkg.tar.xz
-
-
-
