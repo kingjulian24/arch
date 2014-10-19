@@ -18,10 +18,14 @@ Partition disk. For EFI partition, set the size to 512M and type ef00.
 
     cgdisk /dev/sda
 
+#### Format
+
 Format linux partition as ext4 and efi partition as fat 32.
 
     mkfs.ext4 /dev/sdaX
     mkfs.fat -F32 /dev/sdaX
+
+#### Mount
 
 Mount partitions.
 
@@ -42,6 +46,8 @@ Chroot into */mnt*.
 
     arch-chroot /mnt /bin/bash
 
+#### Locale, timezone, and hardware clock
+
 Set locale.
 
     locale-gen
@@ -56,18 +62,26 @@ Set hardware clock.
     
     hwclock --systohc --utc
     
+#### Hostname
+
 Set hostname and make sure it's added to */etc/hosts* as well.
 
     echo nripoll-arch > /etc/hostname
 
-Create initial ramdisk environment.
-
-    mkinitcpio -p linux
+#### Users, groups, and passwords
 
 Create user. Use **visudo** to make any sudo changes for the new user.
 
     useradd -m -G wheel -s /bin/bash nripoll
     passwd nripoll
+
+#### Ramdisk
+
+Create initial ramdisk environment.
+
+    mkinitcpio -p linux
+
+
 
 ### Configure boot partition
 
@@ -89,6 +103,10 @@ Edit */boot/loader/loader.conf*.
     timeout  5
 
 Exit and unmount partitions.
+
+### Battery
+
+    pacman -S acpi
 
 ## Post Installation
 
@@ -120,8 +138,18 @@ Enable new systemd service.
 
 ### Display
 
-    pacman -S xorg xorg-xinit xorg-xdm xorg-xdpyinfo xcursor-themes nvidia xf86-input-synaptics abs dmenu qiv rxvt-unicode 
+#### NVIDIA driver
 
+The 9.1 Macbook Pro has an nvidia driver for linux.
+
+    curl -O -L http://us.download.nvidia.com/XFree86/Linux-x86_64/340.46/NVIDIA-Linux-x86_64-340.46.run
+		sh NVIDIA-Linux-x86_64-340.46.run
+
+#### Xorg
+
+    pacman -S xorg xorg-xdm qiv
+		pacman -S xorg-xinit xorg-xdpyinfo
+	
 Copy skeleton files for xorg. 
 
     cp /etc/skel/.xinitrc /etc/skel/.xsession ~/
@@ -135,6 +163,17 @@ Have nvidia generate the xorg.conf file.
 
     nvidia-xconfig
 
+Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers. 
+
+    /usr/bin/qiv -zr /usr/local/share/wallpapers/*
+
+Add wallpapers to */usr/local/share/wallpapers*.
+Add **exec dwm** to *~/.xinitrc*.
+
+#### Window Manager
+
+    pacman -S xf86-input-synaptics abs dmenu rxvt-unicode 
+
 Initial dwm setup. 
 
     abs community/dwm
@@ -147,14 +186,7 @@ Make any custom changes to *~/dwm/config.h* and rebuild.
     makepkg -g >> PKGBUILD
     makepkg -efi
 
-Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers. 
-
-    /usr/bin/qiv -zr /usr/local/share/wallpapers/*
-
-Add wallpapers to */usr/local/share/wallpapers*.
-Add **exec dwm** to *~/.xinitrc*.
-
-### Browser
+#### Browser
 
 Download and install Google Chrome from the AUR.
 
@@ -164,6 +196,5 @@ Download and install Google Chrome from the AUR.
     makepkg -s
     pacman -U google-chrome-XXXXXX-x86_64.pkg.tar.xz
 
-### Battery
 
-    pacman -S acpi
+
