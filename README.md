@@ -56,7 +56,7 @@ Set locale.
 
 Set timezone.
     
-    ln -s /usr/share/zoneinfo/US/Central
+    ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
 Set hardware clock.
     
@@ -66,15 +66,14 @@ Set hardware clock.
 
 Set hostname and make sure it's added to */etc/hosts* as well.
 
-    echo nripoll-arch > /etc/hostname
+    echo hostname > /etc/hostname
 
 #### Users, groups, and passwords
 
 Create user. Use **visudo** to make any sudo changes for the new user.
 
-    useradd -m -G wheel -s /bin/bash nripoll
-    passwd nripoll
-
+    useradd -m -G wheel -s /bin/bash username
+    passwd username
 
 #### Battery
 
@@ -89,14 +88,14 @@ Install **b43-fwcutter**, **iw**, and **wpa_supplicant**.
 Download and install broadcom drivers.
 
     cd /tmp
-    curl -O http://www.lwfinger.com/b43-firmware/broadcom-wl-6.30.163.46.tar.bz2
-    tar xjf broadcom-wl-6.30.163.46.tar.bz2
+    curl -O -L http://www.lwfinger.com/b43-firmware/broadcom-wl-6.30.163.46.tar.bz2
+    tar -xjf broadcom-wl-6.30.163.46.tar.bz2
     sudo b43-fwcutter -w "/lib/firmware" broadcom-wl-6.30.163.46.wl_apsta.o
 
 Use **wpa_passphrase** to create the wpa_supplicant conf file.
 Make sure it gets properly formatted afterwards.
 
-    echo $(wpa_passphrase ssid passphrase) > /etc/wpa_supplicant/wifi.conf
+    wpa_passphrase ssid passphrase > /etc/wpa_supplicant/wifi.conf
 
 Save systemd wireless file at */etc/systemd/system/network-wireless@.service*.
 
@@ -109,7 +108,7 @@ Enable new systemd service.
 Install **gummiboot**.
 
     pacman -S gummiboot 
-    /usr/bin/gummiboot --path=/boot install
+    gummiboot --path=/boot install
 
 Create */boot/loader/entries/arch.conf*.
 
@@ -123,8 +122,6 @@ Edit */boot/loader/loader.conf*.
     default  arch
     timeout  5
 
-Exit and unmount partitions.
-
 #### Ramdisk
 
 Create initial ramdisk environment.
@@ -135,16 +132,9 @@ Create initial ramdisk environment.
 
 ### Display
 
-#### NVIDIA driver
-
-The 9.1 Macbook Pro has an nvidia driver for linux.
-
-    curl -O -L http://us.download.nvidia.com/XFree86/Linux-x86_64/340.46/NVIDIA-Linux-x86_64-340.46.run
-    sh NVIDIA-Linux-x86_64-340.46.run
-
 #### Xorg
 
-    pacman -S xorg xorg-xdm qiv
+    pacman -S xorg-server xorg-xdm qiv
     pacman -S xorg-xinit xorg-xdpyinfo
 	
 Copy skeleton files for xorg. 
@@ -166,6 +156,14 @@ Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers.
 
 Add wallpapers to */usr/local/share/wallpapers*.
 Add **exec dwm** to *~/.xinitrc*.
+
+#### NVIDIA driver
+
+The 9.1 Macbook Pro has an nvidia driver for linux. Kernel headers are also needed.
+
+    pacman -S kernel26-headers
+    curl -O -L http://us.download.nvidia.com/XFree86/Linux-x86_64/340.46/NVIDIA-Linux-x86_64-340.46.run
+    sh NVIDIA-Linux-x86_64-340.46.run
 
 #### Window Manager
 
