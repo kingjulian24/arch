@@ -39,94 +39,14 @@ Mount partitions.
 
 Edit the mirror list */etc/pacman.d/mirrorlist*.
 
-    pacstrap -i /mnt base base-devel
+    pacstrap -i /mnt base base-devel git
     genfstab -U -p /mnt >> /mnt/etc/fstab
 
 Chroot into */mnt*.
 
     arch-chroot /mnt /bin/bash
 
-#### Locale, timezone, and hardware clock
-
-Set locale.
-
-    locale-gen
-    export LANG=en_US.UTF-8
-    echo LANG=$LANG > /etc/locale.conf
-
-Set timezone.
-    
-    ln -s /usr/share/zoneinfo/US/Central /etc/localtime
-
-Set hardware clock.
-    
-    hwclock --systohc --utc
-    
-#### Hostname
-
-Set hostname and make sure it's added to */etc/hosts* as well.
-
-    echo hostname > /etc/hostname
-
-#### Users, groups, and passwords
-
-Create user. Use **visudo** to make any sudo changes for the new user.
-
-    useradd -m -G wheel -s /bin/bash username
-    passwd username
-
-#### Battery
-
-    pacman -S acpi
-
-#### Wireless
-
-Install **b43-fwcutter**, **iw**, and **wpa_supplicant**. 
-
-    pacman -S b43-fwcutter iw wpa_supplicant
-
-Download and install broadcom drivers.
-
-    cd /tmp
-    curl -O -L http://www.lwfinger.com/b43-firmware/broadcom-wl-6.30.163.46.tar.bz2
-    tar -xjf broadcom-wl-6.30.163.46.tar.bz2
-    sudo b43-fwcutter -w "/lib/firmware" broadcom-wl-6.30.163.46.wl_apsta.o
-
-Use **wpa_passphrase** to create the wpa_supplicant conf file.
-Make sure it gets properly formatted afterwards.
-
-    wpa_passphrase ssid passphrase > /etc/wpa_supplicant/wifi.conf
-
-Save systemd wireless file at */etc/systemd/system/network-wireless@.service*.
-
-Enable new systemd service.
-
-    systemctl enable network-wireless@wlp3s0.service
-
-#### Configure boot partition
-
-Install **gummiboot**.
-
-    pacman -S gummiboot 
-    gummiboot --path=/boot install
-
-Create */boot/loader/entries/arch.conf*.
-
-    title          Arch Linux
-    linux          /vmlinuz-linux
-    initrd         /initramfs-linux.img
-    options        root=/dev/sda2 rw
-
-Edit */boot/loader/loader.conf*.
-
-    default  arch
-    timeout  5
-
-#### Ramdisk
-
-Create initial ramdisk environment.
-
-    mkinitcpio -p linux
+Run *configure.sh*.
 
 ## Post Installation
 
