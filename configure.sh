@@ -1,14 +1,26 @@
 #!/usr/bin/bash
 
+function read_input {
+while true; do
+	read -p "$1" value
+	read -p "Is '$value' correct? (y/n): " confirm
+	case $confirm in
+		[Yy]) break;;
+		[Nn]) ;;
+		*) echo "Please answer 'y' or 'n'.";;
+	esac
+done
+
+echo $value
+}
+
 current_dir=$(pwd)
 cd /tmp
 
 # Locale
-export LANG=en_US.utf-8
-echo $LANG > /etc/locale.gen
+export LANG=en_US.UTF-8
+locale-gen $LANG
 echo LANG=$LANG > /etc/locale.conf
-mv /etc/locale.gen /etc/locale.gen.bkp
-locale-gen
 
 
 # Timezone
@@ -37,8 +49,8 @@ b43-fwcutter -w "/lib/firmware" broadcom-wl-6.30.163.46.wl_apsta.o > /dev/null
 
 
 # Wireless connection config
-ssid=$(read_input("Enter SSID: "))
-passphrase=$(read_input("Enter SSID passphrase: "))
+ssid=$(read_input "Enter SSID: ")
+passphrase=$(read_input "Enter SSID passphrase: ")
 wpa_passphrase $ssid $passphrase > /etc/wpa_supplicant/wifi.conf
 
 
@@ -91,16 +103,3 @@ mkinitcpio -p linux
 cd $current_dir
 echo "Remaining steps: add hostname to /etc/hosts and set root password."
 
-read_input() {
-while true; do
-	read -p $1 value 
-	read -p "Is '$value' correct? (y/n): " confirm
-	case $confirm in
-		[Yy]) break;;
-		[Nn]) ;;
-		*) echo "Please answer 'y' or 'n'.";;
-	esac
-done
-
-echo $value
-}
