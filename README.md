@@ -39,14 +39,14 @@ Mount partitions.
 
 Edit the mirror list */etc/pacman.d/mirrorlist*.
 
-    pacstrap -i /mnt base base-devel git
+    pacstrap -i /mnt base base-devel git gummiboot acpi b43-fwcutter iw wpa_supplicant
     genfstab -U -p /mnt >> /mnt/etc/fstab
 
 Chroot into */mnt*.
 
     arch-chroot /mnt /bin/bash
 
-Run *configure.sh*.
+Run *configure.sh* for base configuration including setting up locale, boot mount, and wireless.
 
 ## Post Installation
 
