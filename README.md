@@ -46,7 +46,42 @@ Chroot into */mnt*.
 
     arch-chroot /mnt /bin/bash
 
-Run *configure.sh* for base configuration including setting up locale, boot mount, and wireless.
+
+    locale-gen en_US.UTF-8
+
+    echo LANG=en_US.UTF-8 > /etc/locale.conf
+
+
+    ln -s /usr/share/zoneinfo/US/Central /etc/localtime
+
+
+    hwclock --systohc --utc
+
+
+    echo some_hostname > /etc/hostname
+
+
+    useradd -m -G wheel -s /bin/bash some_username
+
+    passwd some_username
+
+
+    gummiboot --path=/boot install
+
+
+/boot/loader/loader.conf
+    title	Arch Linux
+    linux	/vmlinuz-linux
+    initrd	/initramfs-linux.img
+    options	root=/dev/sdxY rw
+
+
+/boot/loader/loader.conf
+    default	arch
+    timeout	3
+
+
+    mkinitcpio -p linux
 
 ## Post Installation
 
@@ -60,8 +95,8 @@ Run *configure.sh* for base configuration including setting up locale, boot moun
 	
 Copy skeleton files for xorg. 
 
-    cp /etc/skel/.xinitrc /etc/skel/.xsession ~/
-    chmod 744 ~/.xinitrc ~/.xsession
+    cp /etc/X11/xinit/xinitrc ~/.xinitrc
+    chmod 744 ~/.xinitrc
 
 Enable the xdm system service.
 
