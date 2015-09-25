@@ -1,4 +1,4 @@
-# Arch Linux - Macbook Pro 9.2 (2012)
+# Arch Linux Virtual Box
 ##
 ## Preparations
 
@@ -46,32 +46,27 @@ Chroot into */mnt*.
 
     arch-chroot /mnt /bin/bash
 
-Set up locale
+Set up locale, timezone, hardware clock, hostname, and new user
 
 		echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
     echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
     locale-gen
 
-Timezone
 
     ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
-Hardware clock
 
     hwclock --systohc --utc
 
-Hostname
 
     echo some_hostname > /etc/hostname
 
-Create User
 
     useradd -m -G wheel -s /bin/bash some_username
-
     passwd some_username
 
-Edit the sudoers file to give the wheel root access with *visudo*
+Edit the sudoers file to give the wheel root access with **visudo**
 
 EFI Boot Partition
 
@@ -89,9 +84,9 @@ Edit */boot/loader/loader.conf*
     default	arch
     timeout	3
 
-Enable wired network where interface can be retrieved from *ip link*
+Enable wired network where interface can be retrieved from **ip link**
 
-		systemctl enable dhcpcd@_interface_.service
+		systemctl enable dhcpcd@interface.service
 
 Generate the initramfs image
 
@@ -116,16 +111,11 @@ Enable the xdm system service.
 
     systemctl enable xdm
 
-Have nvidia generate the xorg.conf file.
-
-    nvidia-xconfig
-
 Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers. 
 
     /usr/bin/qiv -zr /usr/local/share/wallpapers/*
 
 Add wallpapers to */usr/local/share/wallpapers*.
-Add *exec dwm* to *~/.xinitrc*.
 
 #### Window Manager
 
@@ -142,3 +132,5 @@ Make any custom changes to *~/dwm/config.h* and rebuild.
 
     makepkg -g >> PKGBUILD
     makepkg -efi
+
+Add **exec dwm** to *~/.xinitrc*.
