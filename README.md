@@ -1,5 +1,5 @@
 # Arch Linux - Macbook Pro 9.2 (2012)
-
+##
 ## Preparations
 
 ### USB (OSX)
@@ -39,47 +39,61 @@ Mount partitions.
 
 Edit the mirror list */etc/pacman.d/mirrorlist*.
 
-    pacstrap -i /mnt base base-devel git gummiboot unzip
+    pacstrap -i /mnt base base-devel git unzip
     genfstab -U -p /mnt >> /mnt/etc/fstab
 
 Chroot into */mnt*.
 
     arch-chroot /mnt /bin/bash
 
+Set up locale
 
-    locale-gen en_US.UTF-8
+		echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-    echo LANG=en_US.UTF-8 > /etc/locale.conf
+    locale-gen
 
+Timezone
 
     ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
+Hardware clock
 
     hwclock --systohc --utc
 
+Hostname
 
     echo some_hostname > /etc/hostname
 
+Create User
 
     useradd -m -G wheel -s /bin/bash some_username
 
     passwd some_username
 
+Edit the sudoers file to give the wheel root access with *visudo*
 
-    gummiboot --path=/boot install
+EFI Boot Partition
 
+		bootctl install
+		
+Edit */boot/loader/loader.conf*
 
-/boot/loader/loader.conf
     title	Arch Linux
     linux	/vmlinuz-linux
     initrd	/initramfs-linux.img
     options	root=/dev/sdxY rw
 
+Edit */boot/loader/loader.conf*
 
-/boot/loader/loader.conf
     default	arch
     timeout	3
 
+Enable wired network where interface can be retrieved from *ip link*
+
+		systemctl enable dhcpcd@_interface_.service
+
+Generate the initramfs image
 
     mkinitcpio -p linux
 
@@ -111,12 +125,7 @@ Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers.
     /usr/bin/qiv -zr /usr/local/share/wallpapers/*
 
 Add wallpapers to */usr/local/share/wallpapers*.
-Add **exec dwm** to *~/.xinitrc*.
-
-#### AMD driver
-
-curl --referer "http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64" -o amd_driver.zip http://www2.ati.com/drivers/linux/amd-driver-installer-15.20.1046-x86.x86_64.zip
-
+Add *exec dwm* to *~/.xinitrc*.
 
 #### Window Manager
 
