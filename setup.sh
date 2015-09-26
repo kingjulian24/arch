@@ -15,7 +15,7 @@ locale-gen
 # /boot
 bootctl install
 
-cat > /boot/loader/loader.conf <<EOF 
+cat > /boot/loader/entries/arch.conf <<EOF 
 title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
