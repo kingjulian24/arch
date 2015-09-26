@@ -73,6 +73,7 @@ Make any custom changes to *~/dwm/config.h* and rebuild.
 Add **exec dwm** to *~/.xinitrc*.
 
 Install **yaourt** for the AUR
+
     git clone https://aur.archlinux.org/package-query.git
     git clone https://aur.archlinux.org/yaourt.git
 
