@@ -45,16 +45,16 @@ Edit the mirror list */etc/pacman.d/mirrorlist*.
 Chroot into */mnt*.
 
     arch-chroot /mnt /bin/zsh
-		git clone https://github.com/nelsonripoll/arch.git
-		cd arch
-		sh setup.sh
+    git clone https://github.com/nelsonripoll/arch.git
+    cd arch
+    sh setup.sh
 
 Edit the sudoers file to give the wheel root access with **visudo**
 
-		
+    
 Enable wired network where interface can be retrieved from **ip link**
 
-		systemctl enable dhcpcd@interface.service
+    systemctl enable dhcpcd@interface.service
 
 Enable the xdm system service.
     sudo systemctl enable xdm
@@ -73,14 +73,14 @@ Make any custom changes to *~/dwm/config.h* and rebuild.
 Add **exec dwm** to *~/.xinitrc*.
 
 Install **yaourt** for the AUR
-		git clone https://aur.archlinux.org/package-query.git
-		git clone https://aur.archlinux.org/yaourt.git
+    git clone https://aur.archlinux.org/package-query.git
+    git clone https://aur.archlinux.org/yaourt.git
 
-		cd package-query
-		makepkg -i
+    cd package-query
+    makepkg -i
 
-		cd yaourt
-		makepkg -i
+    cd yaourt
+    makepkg -i
 
 Install **vim** Vundle plugins
-		vim +PluginInstall +qal
+    vim +PluginInstall +qal
