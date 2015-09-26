@@ -1,13 +1,13 @@
 # Arch Linux Guest In VirtualBox
-[new]: ./img/vb/new  "NEW VIRTUAL"
-[os]:  ./img/vb/os   "ARCH GUEST"
-[mem]: ./img/vb/mem  "ALLOCATE MEMORY"
-[hd1]: ./img/vb/hd1  "NEW HARD DISK"
-[hd2]: ./img/vb/hd2  "HARD DISK TYPE"
-[hd3]: ./img/vb/hd3  "HARD DISK STORAGE TYPE"
-[hd4]: ./img/vb/hd4  "HARD DISK LOCATION AND SIZE"
-[efi]: ./img/vb/efi  "ENABLE EFI"
-[iso]: ./img/vb/iso  "LOAD ARCH ISO"
+[new]: ./img/vb/new.jpg  "NEW VIRTUAL"
+[os]:  ./img/vb/os.jpg   "ARCH GUEST"
+[mem]: ./img/vb/mem.jpg  "ALLOCATE MEMORY"
+[hd1]: ./img/vb/hd1.jpg  "NEW HARD DISK"
+[hd2]: ./img/vb/hd2.jpg  "HARD DISK TYPE"
+[hd3]: ./img/vb/hd3.jpg  "HARD DISK STORAGE TYPE"
+[hd4]: ./img/vb/hd4.jpg  "HARD DISK LOCATION AND SIZE"
+[efi]: ./img/vb/efi.jpg  "ENABLE EFI"
+[iso]: ./img/vb/iso.jpg  "LOAD ARCH ISO"
 
 ## Getting Started
 Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Arch Linux](https://www.archlinux.org/download/).
