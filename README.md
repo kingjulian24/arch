@@ -1,4 +1,29 @@
-# Arch Linux Virtual Box
+# Arch Linux Guest In VirtualBox
+[new]: ./img/vb/new  "NEW VIRTUAL"
+[os]:  ./img/vb/os   "ARCH GUEST"
+[mem]: ./img/vb/mem  "ALLOCATE MEMORY"
+[hd1]: ./img/vb/hd1  "NEW HARD DISK"
+[hd2]: ./img/vb/hd2  "HARD DISK TYPE"
+[hd3]: ./img/vb/hd3  "HARD DISK STORAGE TYPE"
+[hd4]: ./img/vb/hd4  "HARD DISK LOCATION AND SIZE"
+[efi]: ./img/vb/efi  "ENABLE EFI"
+[iso]: ./img/vb/iso  "LOAD ARCH ISO"
+
+## Getting Started
+Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Arch Linux](https://www.archlinux.org/download/).
+
+## VirtualBox
+![Create a new virtual][new]
+![Name is arch, type is Linux, version is Arch Linux (64-bit)][os]
+![Allocate memorty for virtual][mem]
+![Create or select existing hard disk if needed][hd1]
+![Select hard disk type if new][hd2]
+![Set storage type: dynamic or fixed][hd3]
+![Name virtual file and set max size][hd4]
+![Enable efi in the virtual settings under system tab][efi]
+![Start virtual and load iso][iso]
+
+## Arch Linux
 Partition the */dev/sda* disk:
 
     cgdisk /dev/sda
