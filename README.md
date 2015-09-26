@@ -104,10 +104,10 @@ Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and an [Arch Li
  mount /dev/sda1 /mnt/boot
  ```
 
-5.  Edit the mirror list (_/etc/pacman.d/mirrorlist_) if needed. Afterwards install the base system on the root partition.
+5.  Edit the mirror list (_/etc/pacman.d/mirrorlist_) if needed. Afterwards install the base system on the root partition with `pacstrap`. You can use the flag interactive flag **-i** to prevent auto-confirmation of packages.
 
  ```
- pacstrap -i /mnt base base-devel git zsh
+ pacstrap /mnt base base-devel git zsh
  genfstab -U -p /mnt >> /mnt/etc/fstab
  ```
 
@@ -121,34 +121,40 @@ Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and an [Arch Li
  ```
 
 7. VirtualBox looks for _/boot/EFI/BOOT/BOOTX64.EFI_ when booting with EFI enabled. If that doesn't exist, rename the boot loader and directory to match.
+ The setup script used `bootctl install` to install the boot loader and is already set up correctly for VirtualBox.
 
-8. Edit the sudoers file to give the wheel root access with the `visudo` command.
+8. Edit the sudoers file to give the wheel root access without needing a password. This is needed for installing dwm as a user, you can undo it later. Use the `visudo` command.
 
 9. Set passwords for root with `passwd` and the created user(s) with `passwd username`.
 
 10. Enable wired network with `systemctl enable dhcpcd@interface.service` where interface can be retrieved from the `ip link` command:
 
-11. Enable the xdm system service with `sudo systemctl enable xdm`.
+11. `reboot`
 
-12. Add wallpapers to _/usr/local/share/wallpapers_ (optional).
+## Post Installation
+1. Log in as the user created to install dwm and yaourt.
 
-13. Finish dwm setup as non-root user. 
+1. Enable the xdm system service with `sudo systemctl enable xdm`.
+
+2. Add wallpapers to _/usr/local/share/wallpapers_ (optional).
+
+3. Finish dwm setup as non-root user. 
 
  ```
  cd ~/dwm
  makepkg -i
  ```
 
-14. Make any custom changes to _~/dwm/config.h_ and rebuild.
+4. Make any custom changes to _~/dwm/config.h_ and rebuild.
 
  ```
  makepkg -g >> PKGBUILD
  makepkg -efi
  ```
 
-15. Add the `exec dwm` command to _~/.xinitrc_.
+5. Add the `exec dwm` command to _~/.xinitrc_.
 
-16. Install **yaourt** for the AUR:
+6. Install **yaourt** for the AUR:
 
  ```
  git clone https://aur.archlinux.org/package-query.git
@@ -160,4 +166,4 @@ Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and an [Arch Li
  makepkg -i
  ```
 
-17. Install **vim** Vundle plugins with `vim +PluginInstall +qal`.
+7. Install **vim** Vundle plugins with `vim +PluginInstall +qal`.
