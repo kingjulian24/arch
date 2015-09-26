@@ -39,93 +39,30 @@ Mount partitions.
 
 Edit the mirror list */etc/pacman.d/mirrorlist*.
 
-    pacstrap -i /mnt base base-devel git unzip
+    pacstrap -i /mnt base base-devel git zsh
     genfstab -U -p /mnt >> /mnt/etc/fstab
 
 Chroot into */mnt*.
 
-    arch-chroot /mnt /bin/bash
-
-Set up locale, timezone, hardware clock, hostname, and new user
-
-		echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-    echo "LANG=en_US.UTF-8" > /etc/locale.conf
-
-    locale-gen
-
-
-    ln -s /usr/share/zoneinfo/US/Central /etc/localtime
-
-
-    hwclock --systohc --utc
-
-
-    echo some_hostname > /etc/hostname
-
-
-    useradd -m -G wheel -s /bin/bash some_username
-    passwd some_username
+    arch-chroot /mnt /bin/zsh
+		git clone https://github.com/nelsonripoll/arch.git
+		cd arch
+		sh setup.sh
 
 Edit the sudoers file to give the wheel root access with **visudo**
 
-EFI Boot Partition
-
-		bootctl install
 		
-Edit */boot/loader/loader.conf*
-
-    title	Arch Linux
-    linux	/vmlinuz-linux
-    initrd	/initramfs-linux.img
-    options	root=/dev/sdxY rw
-
-Edit */boot/loader/loader.conf*
-
-    default	arch
-    timeout	3
-
 Enable wired network where interface can be retrieved from **ip link**
 
 		systemctl enable dhcpcd@interface.service
 
-Generate the initramfs image
-
-    mkinitcpio -p linux
-
-## Post Installation
-
-### Display
-
-#### Xorg
-
-    pacman -S mesa-libgl
-    pacman -S xorg-server xorg-xdm qiv
-    pacman -S xorg-xinit xorg-xdpyinfo
-	
-Copy skeleton files for xorg. 
-
-    cp /etc/X11/xinit/xinitrc ~/.xinitrc
-    chmod 744 ~/.xinitrc
-
 Enable the xdm system service.
-
-    systemctl enable xdm
-
-Edit */etc/X11/xdm/Xsetup_0* for custom wallpapers. 
-
-    /usr/bin/qiv -zr /usr/local/share/wallpapers/*
+    sudo systemctl enable xdm
 
 Add wallpapers to */usr/local/share/wallpapers*.
 
-#### Window Manager
-
-    pacman -S abs dmenu rxvt-unicode 
-
-Initial dwm setup. 
-
-    abs community/dwm
-    cp -r /var/abs/community/dwm /home/nripoll/dwm
-    cd /home/nripoll/dwm
+Finish dwm setup as non-root user. 
+    cd ~/dwm
     makepkg -i
 
 Make any custom changes to *~/dwm/config.h* and rebuild.
@@ -134,3 +71,16 @@ Make any custom changes to *~/dwm/config.h* and rebuild.
     makepkg -efi
 
 Add **exec dwm** to *~/.xinitrc*.
+
+Install **yaourt** for the AUR
+		git clone https://aur.archlinux.org/package-query.git
+		git clone https://aur.archlinux.org/yaourt.git
+
+		cd package-query
+		makepkg -i
+
+		cd yaourt
+		makepkg -i
+
+Install **vim** Vundle plugins
+		vim +PluginInstall +qal
