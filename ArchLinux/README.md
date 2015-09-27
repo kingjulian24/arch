@@ -56,7 +56,7 @@
 5.  Edit the mirror list (_/etc/pacman.d/mirrorlist_) if needed. Afterwards install the base system on the root partition with `pacstrap`. You can use the flag interactive flag **-i** to prevent auto-confirmation of packages.
 
  ```
- pacstrap /mnt base base-devel git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl wget
+ pacstrap /mnt base base-devel git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
  genfstab -U -p /mnt >> /mnt/etc/fstab
  ```
 
