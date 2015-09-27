@@ -8,12 +8,8 @@ en_US.UTF-8 UTF-8
 EOF
 
 cat > /etc/locale.conf <<EOF 
-LANG=en_US.UTF-8
-EOF
-
-locale-gen
-
-
+LANG=en_US.UTF-8 EOF
+locale-gen 
 # /boot
 bootctl install
 
@@ -51,7 +47,7 @@ abs community/dwm
 
 pip install powerline-status
 
-cp -f etc/X11/xdm/Xresources /etc/X11/xdm/Xresources
+cp -f $CONFIG/xdm/Xresources /etc/X11/xdm/Xresources
 
 systemctl enable xdm
 
@@ -62,25 +58,44 @@ cat > /etc/X11/xdm/Xsetup_0 <<EOF
 EOF
 
 
-# user
+# install patched fonts and config for powerline
+POWERLINE="https://github.com/powerline"
+
+git clone --depth=1 $POWERLINE/fonts.git /tmp/
+
+mv /tmp/fonts/* /usr/share/fonts/
+
+curl -L $POWERLINE/powerline/raw/develop/font/PowerlineSymbols.otf \
+	   -O /usr/share/fonts/PowerlineSymbols.otf
+
+curl -L $POWERLINE/powerline/raw/develop/font/10-powerline-symbols.conf \
+	   -O /etc/fonts/conf.d/11-powerline-symbols.conf
+
+fc-cache -vf /usr/share/fonts
+
+
+# user setup
 useradd -m -G wheel -s /bin/bash $USERNAME
 
-su $USERNAME --command="mkdir -pv ~/.vim/colors ~/.vim/bundle ~/.local/share ~/.config/fontconfig/conf.d"
-su $USERNAME --command="cp -f $CONFIG/vimrc ~/.vimrc"
-su $USERNAME --command="cp -f $CONFIG/vim/colors/solarized.vim ~/.vim/colors/solarized.vim"
-su $USERNAME --command="cp -f $CONFIG/xinitrc ~/.xinitrc"
-su $USERNAME --command="cp -f $CONFIG/dircolors ~/.dircolors"
-su $USERNAME --command="cp -f $CONFIG/Xresources ~/.Xresources"
-su $USERNAME --command="cp -f $CONFIG/zshrc ~/.zshrc"
-su $USERNAME --command="cp -fr /var/abs/community/dwm ~/dwm"
-su $USERNAME --command="chmod 744 ~/.xinitrc"
-su $USERNAME --command="git clone --depth=1 https://github.com/powerline/fonts.git ~/.local/share"
-su $USERNAME --command="git clone --depth=1 https://github.com/VundleVim/vundle.vim.git ~/.vim/bundle/Vundle.vim"
-su $USERNAME --command="git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
-su $USERNAME --command="curl -L https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf -O ~/.local/share/fonts/PowerlineSymbols.otf"
-su $USERNAME --command="curl -L https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf -O ~/.config/fontconfig/conf.d/10-powerline-symbols.conf"
-su $USERNAME --command="fc-cache -vf ~/.local/share/fonts"
-su $USERNAME --command="chsh -s /bin/zsh"
+su $USERNAME --c "cp -fr /var/abs/community/dwm ~/dwm"
 
-# Initramfs
+su $USERNAME --c "mkdir -pv ~/.vim/colors ~/.vim/bundle" 
+
+su $USERNAME --c "cp -f $CONFIG/x11/xinitrc ~/.xinitrc"
+su $USERNAME --c "cp -f $CONFIG/x11/Xresources ~/.Xresources"
+
+su $USERNAME --c "cp -f $CONFIG/zshrc ~/.zshrc"
+
+su $USERNAME --c "cp -f $CONFIG/vim/vimrc ~/.vimrc"
+
+su $USERNAME --c "cp -f $CONFIG/solarized/solarized_dark.vim ~/.vim/colors/solarized.vim"
+su $USERNAME --c "cp -f $CONFIG/solarized/solarized_dark.dircolors ~/.dircolors"
+
+su $USERNAME --c "git clone --depth=1 https://github.com/VundleVim/vundle.vim.git ~/.vim/bundle/Vundle.vim"
+su $USERNAME --c "git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
+
+su $USERNAME --c "chsh -s /bin/zsh"
+
+
+# initramfs
 mkinitcpio -p linux
