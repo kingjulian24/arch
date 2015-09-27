@@ -1,18 +1,20 @@
 # Arch Linux Guest In VirtualBox
-[new]:  ./img/vb/new.jpg    "NEW VIRTUAL"
-[os]:   ./img/vb/os.jpg     "ARCH GUEST"
-[mem]:  ./img/vb/mem.jpg    "ALLOCATE MEMORY"
-[hd1]:  ./img/vb/hd1.jpg    "NEW HARD DISK"
-[hd2]:  ./img/vb/hd2.jpg    "HARD DISK TYPE"
-[hd3]:  ./img/vb/hd3.jpg    "HARD DISK STORAGE TYPE"
-[hd4]:  ./img/vb/hd4.jpg    "HARD DISK LOCATION AND SIZE"
-[efi]:  ./img/vb/efi.jpg    "ENABLE EFI"
-[iso]:  ./img/vb/iso.jpg    "LOAD ARCH ISO"
-[boot]: ./img/arch/boot.jpg "BOOT TO ISO"
-[pre]:  ./img/arch/pre.jpg  "BLOCK DEVICES BEFORE PARTITIONING"
-[part]: ./img/arch/part.jpg "PARTITIONING"
-[post]: ./img/arch/post.jpg "BLOCK DEVICES AFTER PARTITIONING"
-[frmt]: ./img/arch/frmt.jpg "FORMATTING PARTITIONS"
+[new]:   ./img/vb/new.jpg     "NEW VIRTUAL"
+[os]:    ./img/vb/os.jpg      "ARCH GUEST"
+[mem]:   ./img/vb/mem.jpg     "ALLOCATE MEMORY"
+[hd1]:   ./img/vb/hd1.jpg     "NEW HARD DISK"
+[hd2]:   ./img/vb/hd2.jpg     "HARD DISK TYPE"
+[hd3]:   ./img/vb/hd3.jpg     "HARD DISK STORAGE TYPE"
+[hd4]:   ./img/vb/hd4.jpg     "HARD DISK LOCATION AND SIZE"
+[efi]:   ./img/vb/efi.jpg     "ENABLE EFI"
+[iso]:   ./img/vb/iso.jpg     "LOAD ARCH ISO"
+[boot]:  ./img/arch/boot.jpg  "BOOT TO ISO"
+[pre]:   ./img/arch/pre.jpg   "BLOCK DEVICES BEFORE PARTITIONING"
+[part]:  ./img/arch/part.jpg  "PARTITIONING"
+[post]:  ./img/arch/post.jpg  "BLOCK DEVICES AFTER PARTITIONING"
+[frmt]:  ./img/arch/frmt.jpg  "FORMATTING PARTITIONS"
+[wheel]: ./img/arch/wheel.jpg "EDIT PERMISSIONS FOR WHEEL GROUP"
+[urxvt]: ./img/arch/urxvt.jpg "CHANGE DWM DEFAULT TERMINAL"
 
 ## Getting Started
 Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and an [Arch Linux](https://www.archlinux.org/download/) iso.
@@ -107,63 +109,71 @@ Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and an [Arch Li
 5.  Edit the mirror list (_/etc/pacman.d/mirrorlist_) if needed. Afterwards install the base system on the root partition with `pacstrap`. You can use the flag interactive flag **-i** to prevent auto-confirmation of packages.
 
  ```
- pacstrap /mnt base base-devel git zsh
+ pacstrap /mnt base base-devel git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl wget
  genfstab -U -p /mnt >> /mnt/etc/fstab
  ```
 
-6. Chroot into _/mnt_, clone this project, and run **setup.sh**:
+6. Chroot into _/mnt_ with `arch-chroot /mnt /bin/bash`.
+
+7. Uncomment the wheel group in the sudoers file, use `visudo`. 
+ ![Create a new virtual][wheel]
+
+8. Set passwords for root with `passwd` and the created user(s) with `passwd username`.
+
+9. Enable wired network with `systemctl enable dhcpcd@interface.service` where interface can be retrieved from the `ip link` command:
+
+10. Change directories into _/tmp_, clone this project, and run the setup script.
 
  ```
- arch-chroot /mnt /bin/bash
+ cd /tmp
  git clone https://github.com/nelsonripoll/arch.git
  cd arch
  sh setup.sh
  ```
 
-7. VirtualBox looks for _/boot/EFI/BOOT/BOOTX64.EFI_ when booting with EFI enabled. If that doesn't exist, rename the boot loader and directory to match.
- The setup script used `bootctl install` to install the boot loader and is already set up correctly for VirtualBox.
+11. VirtualBox looks for _/boot/EFI/BOOT/BOOTX64.EFI_ when booting with EFI enabled. If that doesn't exist, rename the boot loader and directory to match. The setup script used `bootctl install` to install the boot loader and is already set up correctly for VirtualBox.
 
-8. Edit the sudoers file to give the wheel root access without needing a password. This is needed for installing dwm as a user, you can undo it later. Use the `visudo` command.
-
-9. Set passwords for root with `passwd` and the created user(s) with `passwd username`.
-
-10. Enable wired network with `systemctl enable dhcpcd@interface.service` where interface can be retrieved from the `ip link` command:
-
-11. `reboot`
+12. `exit` then `umount -R /mnt` and finally `reboot`
 
 ## Post Installation
-1. Log in as the user created to install dwm and yaourt.
-
-1. Enable the xdm system service with `sudo systemctl enable xdm`.
-
-2. Add wallpapers to _/usr/local/share/wallpapers_ (optional).
-
-3. Finish dwm setup as non-root user. 
+1. Log in as the created user. Your terminal will look funny...but we'll fix that. First finish installing **dwm**:
 
  ```
  cd ~/dwm
  makepkg -i
  ```
 
-4. Make any custom changes to _~/dwm/config.h_ and rebuild.
+ Make any custom changes to _~/dwm/config.h_. The change we must do is set the default terminal to **urxvt** instead of **uxterm**. When finished, rebuild:
+
+ ![Change default terminal in dwm][urxvt]
 
  ```
  makepkg -g >> PKGBUILD
- makepkg -efi
+ makepkg -ef
  ```
 
-5. Add the `exec dwm` command to _~/.xinitrc_.
-
-6. Install **yaourt** for the AUR:
+2. Now install **yaourt**:
 
  ```
  git clone https://aur.archlinux.org/package-query.git
  cd package-query
- makepkg -i
+ makepkg
+ sudo pacman -U --noconfirm package-query*.pkg.tar.xz
  
  git clone https://aur.archlinux.org/yaourt.git
  cd yaourt
- makepkg -i
+ makepkg
+ sudo pacman -U --noconfirm yaourt*.pkg.tar.xz
+ ```
+ The **yaourt** tool is an easy way to install packages from the AUR.
+
+3. Install the VirtualBox guest additions from the AUR.
+
+ ```
+ yaourt virtualbox-guest-utils
+ modprobe -a vboxguest vboxsf vboxvideo
  ```
 
-7. Install **vim** Vundle plugins with `vim +PluginInstall +qal`.
+4. Add wallpapers to _/usr/local/share/wallpapers_ (optional).
+
+5. Install **vim** Vundle plugins with `vim +PluginInstall +qal`.

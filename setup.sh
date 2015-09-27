@@ -1,5 +1,6 @@
 #!/bin/bash
 DOTFILES="$(pwd)/dotfiles"
+USERNAME="nripoll"
 
 # locale
 cat > /etc/locale.gen <<EOF 
@@ -29,6 +30,14 @@ timeout 3
 EOF
 
 
+# virtualbox guest utils conf
+cat > /etc/modules-load.d/virtualbox.conf <<EOF
+vboxguest
+vboxsf
+vboxvideo
+EOF
+
+
 # timezone
 ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
@@ -38,13 +47,13 @@ hwclock --systohc --utc
 
 
 # display/window Manager
-pacman --noconfirm -S xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode vim-python3 python-pip yajl
-
 abs community/dwm
 
 pip install powerline-status
 
 cp -f etc/X11/xdm/Xresources /etc/X11/xdm/Xresources
+
+systemctl enable xdm
 
 mkdir /usr/local/share/wallpapers
 
@@ -54,21 +63,24 @@ EOF
 
 
 # user
-useradd -m -G wheel -s /bin/bash nripoll
+useradd -m -G wheel -s /bin/bash $USERNAME
 
-su nripoll --command="mkdir -pv ~/.vim/colors ~/.vim/bundle ~/.local/share/fonts ~/.config/fontconfig/conf.d"
-su nripoll --command="cp -f $DOTFILES/vimrc ~/.vimrc"
-su nripoll --command="cp -f $DOTFILES/vim/colors/solarized.vim ~/.vim/colors/solarized.vim"
-su nripoll --command="cp -f $DOTFILES/local/share/fonts/DejaVuSansMono-Powerline.ttf ~/.local/share/fonts/DejaVuSansMono-Powerline.ttf"
-su nripoll --command="cp -f $DOTFILES/xinitrc ~/.xinitrc"
-su nripoll --command="cp -f $DOTFILES/dircolors ~/.dircolors"
-su nripoll --command="cp -f $DOTFILES/Xresources ~/.Xresources"
-su nripoll --command="cp -f $DOTFILES/zshrc ~/.zshrc"
-su nripoll --command="chmod 744 ~/.xinitrc"
-su nripoll --command="fc-cache -vf ~/.local/share/fonts"
-su nripoll --command="git clone --depth=1 https://github.com/VundleVim/vundle.vim.git ~/.vim/bundle/Vundle.vim"
-su nripoll --command="git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
-su nripoll --command="chsh -s /bin/zsh"
+su $USERNAME --command="mkdir -pv ~/.vim/colors ~/.vim/bundle ~/.local/share/fonts ~/.config/fontconfig/conf.d"
+su $USERNAME --command="cp -f $DOTFILES/vimrc ~/.vimrc"
+su $USERNAME --command="cp -f $DOTFILES/vim/colors/solarized.vim ~/.vim/colors/solarized.vim"
+su $USERNAME --command="cp -f $DOTFILES/local/share/fonts/DejaVuSansMono-Powerline.ttf ~/.local/share/fonts/DejaVuSansMono-Powerline.ttf"
+su $USERNAME --command="cp -f $DOTFILES/xinitrc ~/.xinitrc"
+su $USERNAME --command="cp -f $DOTFILES/dircolors ~/.dircolors"
+su $USERNAME --command="cp -f $DOTFILES/Xresources ~/.Xresources"
+su $USERNAME --command="cp -f $DOTFILES/zshrc ~/.zshrc"
+su $USERNAME --command="cp -fr /var/abs/community/dwm ~/dwm"
+su $USERNAME --command="chmod 744 ~/.xinitrc"
+su $USERNAME --command="git clone --depth=1 https://github.com/VundleVim/vundle.vim.git ~/.vim/bundle/Vundle.vim"
+su $USERNAME --command="git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
+su $USERNAME --command="wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf -O ~/.local/share/fonts/PowerlineSymbols.otf"
+su $USERNAME --command="wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf -O ~/.config/fontconfig/conf.d/10-powerline-symbols.conf"
+su $USERNAME --command="fc-cache -vf ~/.local/share/fonts"
+su $USERNAME --command="chsh -s /bin/zsh"
 
 # Initramfs
 mkinitcpio -p linux
