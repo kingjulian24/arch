@@ -1,43 +1,43 @@
 xlogin*login.translations: #override \
-	Ctrl<Key>R: abort-display()\n\
-	<Key>F1: set-session-argument(failsafe) finish-field()\n\
-	<Key>Delete: delete-character()\n\
-	<Key>Left: move-backward-character()\n\
-	<Key>Right: move-forward-character()\n\
-	<Key>Home: move-to-begining()\n\
-	<Key>End: move-to-end()\n\
-	Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
-	<Key>KP_Enter: set-session-argument() finish-field()\n\
-	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
-	<Key>Return: set-session-argument() finish-field()
+  Ctrl<Key>R:        abort-display()\n\
+  <Key>F1:           set-session-argument(failsafe) finish-field()\n\
+  <Key>Delete:       delete-character()\n\
+  <Key>Left:         move-backward-character()\n\
+  <Key>Right:        move-forward-character()\n\
+  <Key>Home:         move-to-begining()\n\
+  <Key>End:          move-to-end()\n\
+  Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
+  <Key>KP_Enter:     set-session-argument() finish-field()\n\
+  Ctrl<Key>Return:   set-session-argument(failsafe) finish-field()\n\
+  <Key>Return:       set-session-argument() finish-field()
 
-xlogin*greeting: Authentication Required
-xlogin*namePrompt: \040\040\040\040\040\040\040\040Login:
+xlogin*greeting:     Authentication Required
+xlogin*namePrompt:   \040\040\040Login:
 xlogin*passwdPrompt: Password:
-xlogin*fail: -- Permission Denied -- 
+xlogin*fail:         -- Permission Denied -- 
 
-xlogin*greetFace:	Source Sans Pro Light-10
-xlogin*face: 		Source Sans Pro ExtraLight-8
-xlogin*promptFace: 	Source Sans Pro ExtraLight-8
-xlogin*failFace: 	Source Sans Pro ExtraLight-8
+xlogin*face:       xft:DejaVu Sans Mono for Powerline:style=Book:size=12
+xlogin*greetFace:  xft:DejaVu Sans Mono for Powerline:style=Book:size=12
+xlogin*promptFace: xft:DejaVu Sans Mono for Powerline:style=Book:size=12
+xlogin*failFace:   xft:DejaVu Sans Mono for Powerline:style=Book:size=12
 
-xlogin*background: #1b1b1b 
-xlogin*greetColor: #bce000
-xlogin*shdColor: #bce000
-xlogin*hiColor: #bce000
-xlogin*failColor: #bce000
-*Foreground: #bce000
-*Background: #fffff0
+xlogin*background:  #005577 
+xlogin*foreground:  #eeeeee 
+xlogin*greetColor:  #bbbbbb
+xlogin*promptColor: #bbbbbb
+xlogin*failColor:   #de8e38
+xlogin*shdColor:    #eeeeee
+xlogin*hiColor:     #eeeeee
 
-xlogin*geometry: 400x200-640-250
-xlogin*frameWidth: 1
-xlogin*borderWidth: 0
+xlogin*geometry:         500x200-100-100
+xlogin*frameWidth:       1
+xlogin*borderWidth:      0
 xlogin*innerFramesWidth: 0
-xlogin*sepWidth: 0
-xlogin*useShape: true
-xlogin*logoPadding: 0
+xlogin*sepWidth:         0
+xlogin*useShape:         true
+xlogin*logoPadding:      0
 
-XConsole.text.geometry:	200x100
-XConsole.verbose:	true
-XConsole*iconic:	true
-XConsole*font:		fixed
+XConsole.text.geometry: 200x100
+XConsole.verbose:       true
+XConsole*iconic:        true
+XConsole*font:          fixed
