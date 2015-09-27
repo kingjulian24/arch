@@ -1,5 +1,5 @@
 #!/bin/bash
-DOTFILES="$(pwd)/dotfiles"
+CONFIG="$(pwd)/config"
 USERNAME="nripoll"
 
 # locale
@@ -66,12 +66,12 @@ EOF
 useradd -m -G wheel -s /bin/bash $USERNAME
 
 su $USERNAME --command="mkdir -pv ~/.vim/colors ~/.vim/bundle ~/.local/share ~/.config/fontconfig/conf.d"
-su $USERNAME --command="cp -f $DOTFILES/vimrc ~/.vimrc"
-su $USERNAME --command="cp -f $DOTFILES/vim/colors/solarized.vim ~/.vim/colors/solarized.vim"
-su $USERNAME --command="cp -f $DOTFILES/xinitrc ~/.xinitrc"
-su $USERNAME --command="cp -f $DOTFILES/dircolors ~/.dircolors"
-su $USERNAME --command="cp -f $DOTFILES/Xresources ~/.Xresources"
-su $USERNAME --command="cp -f $DOTFILES/zshrc ~/.zshrc"
+su $USERNAME --command="cp -f $CONFIG/vimrc ~/.vimrc"
+su $USERNAME --command="cp -f $CONFIG/vim/colors/solarized.vim ~/.vim/colors/solarized.vim"
+su $USERNAME --command="cp -f $CONFIG/xinitrc ~/.xinitrc"
+su $USERNAME --command="cp -f $CONFIG/dircolors ~/.dircolors"
+su $USERNAME --command="cp -f $CONFIG/Xresources ~/.Xresources"
+su $USERNAME --command="cp -f $CONFIG/zshrc ~/.zshrc"
 su $USERNAME --command="cp -fr /var/abs/community/dwm ~/dwm"
 su $USERNAME --command="chmod 744 ~/.xinitrc"
 su $USERNAME --command="git clone --depth=1 https://github.com/powerline/fonts.git ~/.local/share"
