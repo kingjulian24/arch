@@ -3,7 +3,7 @@
 Log in as the created user. Install remaining dependencies and clone this project.
 
 ```
-sudo pacman --noconfirm git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
+sudo pacman -S --noconfirm git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
 git clone https://github.com/nelsonripoll/arch.git /tmp/
 ```
 
@@ -26,13 +26,15 @@ sudo pacman -U --noconfirm yaourt*.pkg.tar.xz
 ```
 yaourt virtualbox-guest-utils
 
-modprobe -a vboxguest vboxsf vboxvideo
+sudo modprobe -a vboxguest vboxsf vboxvideo
+```
 
-cat > /etc/modules-load.d/virtualbox.conf <<EOF
+Open _/etc/modules-load.d/virtualbox.conf_ and add the following:
+
+```
 vboxguest
 vboxsf
 vboxvideo
-EOF
 ```
 
 ## Powerline & Fonts
@@ -61,10 +63,12 @@ cp -f arch/config/xdm/Xresources /etc/X11/xdm/Xresources
 systemctl enable xdm
 
 mkdir /usr/local/share/wallpapers
+```
 
-cat > /etc/X11/xdm/Xsetup_0 <<EOF
+Open _/etc/X11/xdm/Xsetup_0_ and make sure this is the only thing in there:
+
+```
 /usr/bin/qiv -zr /usr/local/share/wallpapers/*
-EOF
 ```
 
 ## DWM

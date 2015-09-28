@@ -70,34 +70,36 @@ Chroot into _/mnt_. First thing you need to do is set the locale, timezone,
 arch-chroot /mnt /bin/bash
 
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "LANG=en_US.UTF-8"
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "localhost" > /etc/hostname
 
 locale-gen 
 
 ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 
 hwclock --systohc --utc
-
-echo "localhost" > /etc/hostname
 ```
 
 Install the boot loader.
 
 ```
 bootctl install
+```
 
-cat > /boot/loader/entries/arch.conf <<EOF 
+Open a new file at _/boot/loader/entries/arch.conf_ and add the following:
+
+```
 title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
 options root=/dev/sda2 rw
-EOF
+```
 
-cat > /boot/loader/loader.conf <<EOF 
+Open another file at _/boot/loader/loader.conf_ and add the following:
+
+```
 default arch
 timeout 3
-EOF
-
 ```
 
 VirtualBox looks for _/boot/EFI/BOOT/BOOTX64.EFI_ when booting with EFI
