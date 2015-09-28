@@ -13,4 +13,4 @@ Download Arch Linux [here](https://www.archlinux.org/download/) and read the [be
 [Instructions](./VirtualBox/README.md)
 
 ### Installing Arch Linux On the Guest 
-[Instructions](./ArchLinux/README.md)
+[Instructions](./ArchLinux/BaseInstallation/README.md)
