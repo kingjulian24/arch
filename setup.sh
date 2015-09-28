@@ -1,7 +1,7 @@
 #!/bin/bash
 CURR_DIR=$(pwd)
 
-			ARCH="https://github.com/nelsonripoll/arch.git"
+      ARCH="https://github.com/nelsonripoll/arch.git"
     VUNDLE="https://github.com/VundleVim/vundle.vim.git"
    OHMYZSH="https://github.com/robbyrussell/oh-my-zsh.git"
   PKGQUERY="https://aur.archlinux.org/package_query.git"
@@ -12,7 +12,7 @@ CURR_DIR=$(pwd)
      ZSHRC="~/arch/config/zshell/zshrc"
 XRESOURCES="~/arch/config/x11/Xresources"
    XINITRC="~/arch/config/x11/xinitrc"
-	     DWM="~/arch/config/dwm/config.h"
+       DWM="~/arch/config/dwm/config.h"
 
 mkdir -pv ~/.vim/colors ~/.vim/bundle
 
