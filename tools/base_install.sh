@@ -39,14 +39,12 @@ pip install powerline-status
 
 $POWERLINE=https://github.com/powerline
 
-git clone --depth=1 $POWERLINE/fonts.git /tmp/
+git clone --depth=1 https://github.com/powerline/fonts.git /tmp/
 
 mv /tmp/fonts/* /usr/share/fonts/
 
-curl -L $POWERLINE/powerline/raw/develop/font/PowerlineSymbols.otf \
-     -o /usr/share/fonts/PowerlineSymbols.otf
+curl -L https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf -o /usr/share/fonts/PowerlineSymbols.otf
 
-curl -L $POWERLINE/powerline/raw/develop/font/10-powerline-symbols.conf \
-     -o /etc/fonts/conf.d/11-powerline-symbols.conf
+curl -L https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf -o /etc/fonts/conf.d/11-powerline-symbols.conf
 
 fc-cache -vf /usr/share/fonts
