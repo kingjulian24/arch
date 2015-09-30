@@ -28,7 +28,7 @@ initrd /initramfs-linux.img
 options root=/dev/sda2 rw
 EOF
 
-cat > /boot/loader/entries/arch.conf <<EOF
+cat > /boot/loader/loader.conf <<EOF
 default arch
 timeout 3
 EOF
