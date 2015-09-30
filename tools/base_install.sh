@@ -37,9 +37,7 @@ EOF
 # powerline and patched fonts
 pip install powerline-status
 
-$POWERLINE=https://github.com/powerline
-
-git clone --depth=1 https://github.com/powerline/fonts.git /tmp/
+git clone --depth=1 https://github.com/powerline/fonts.git /tmp/fonts
 
 mv /tmp/fonts/* /usr/share/fonts/
 
