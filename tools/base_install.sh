@@ -1,26 +1,15 @@
 #!/bin/bash
+cd /tmp 
 
-# variables
-POWERLINE_FONTS="https://github.com/powerline/fonts.git"
-POWERLINE_SYMBOLS="https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf"
-POWERLINE_CONF="https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf"
-
-read -r CMNDS <<EOF
-git clone https://aur.archlinux.org/package-query.git
-cd package-query
-makepkg -i --noconfirm
-
-git clone https://aur.archlinux.org/yaourt.git
-cd yaourt
-makepkg -i --noconfirm
-EOF
-
+# packages
 read -r PKGS <<EOF
-git zsh vim-python3 python-pip 
-xorg-server xorg-xdm xorg-xinit 
-qiv abs dmenu rxvt-unicode yajl
+git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
 EOF
 
+pacman -S --noconfirm $PKGS 
+
+
+# boot loader
 read -r ARCH <<EOF
 title Arch Linux
 linux /vmlinuz-linux
@@ -33,9 +22,14 @@ default arch
 timeout 3
 EOF
 
+bootctl install
 
-# packages
-pacman -S --noconfirm $PKGS 
+echo "$ARCH" > /boot/loader/entries/arch.conf 
+echo "$BOOT" > /boot/loader/loader.conf
+
+
+# enable network
+systemctl enable dhcpcd@enp0s3.service
 
 
 # locale
@@ -54,30 +48,17 @@ ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 hwclock --systohc --utc
 
 
-# boot loader
-bootctl install
-
-echo "$ARCH" > /boot/loader/entries/arch.conf 
-echo "$BOOT" > /boot/loader/loader.conf
-
-
-# powerline and patched fonts
-pip install powerline-status
-
-curl -L $POWERLINE_SYMBOLS -o /usr/share/fonts/PowerlineSymbols.otf
-curl -L $POWERLINE_CONF -o /etc/fonts/conf.d/11-powerline-symbols.conf
-
-git clone --depth=1 $POWERLINE_FONTS /tmp/fonts
-mv /tmp/fonts/* /usr/share/fonts/
-
-fc-cache -vf /usr/share/fonts
-
-
-# enable network
-systemctl enable dhcpcd@enp0s3.service
-
-
 # create user for non-root tasks
+read -r CMNDS <<EOF
+git clone https://aur.archlinux.org/package-query.git
+cd package-query
+makepkg -i --noconfirm
+
+git clone https://aur.archlinux.org/yaourt.git
+cd yaourt
+makepkg -i --noconfirm
+EOF
+
 cp /etc/sudoers /etc/sudoers.bkp
 
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -89,3 +70,19 @@ su arch-user -c "$CMNDS"
 userdel arch-user
 
 mv /etc/sudoers.bkp /etc/sudoers
+
+
+# powerline and patched fonts
+POWERLINE_FONTS="https://github.com/powerline/fonts.git"
+POWERLINE_SYMBOLS="https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf"
+POWERLINE_CONF="https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf"
+
+pip install powerline-status
+
+curl -L $POWERLINE_SYMBOLS -o /usr/share/fonts/PowerlineSymbols.otf
+curl -L $POWERLINE_CONF -o /etc/fonts/conf.d/11-powerline-symbols.conf
+
+git clone --depth=1 $POWERLINE_FONTS /tmp/fonts
+mv /tmp/fonts/* /usr/share/fonts/
+
+fc-cache -vf /usr/share/fonts
