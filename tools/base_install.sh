@@ -2,22 +2,24 @@
 cd /tmp 
 
 # packages
-read -r PKGS <<EOF
-git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
+read -r -d '' PKGS <<'EOF'
+git zsh vim-python3 python-pip 
+xorg-server xorg-xdm xorg-xinit 
+qiv abs dmenu rxvt-unicode yajl
 EOF
 
 pacman -S --noconfirm $PKGS 
 
 
 # boot loader
-read -r ARCH <<EOF
+read -r -d '' ARCH <<'EOF'
 title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
 options root=/dev/sda2 rw
 EOF
 
-read -r BOOT <<EOF
+read -r -d '' BOOT <<'EOF'
 default arch
 timeout 3
 EOF
@@ -49,7 +51,7 @@ hwclock --systohc --utc
 
 
 # create user for non-root tasks
-read -r CMNDS <<EOF
+read -r -d '' CMNDS <<'EOF'
 git clone https://aur.archlinux.org/package-query.git
 cd package-query
 makepkg -i --noconfirm
