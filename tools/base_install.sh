@@ -16,8 +16,8 @@ makepkg -i --noconfirm
 EOF
 
 read -r PKGS <<EOF
-xorg-server xorg-xdm xorg-xinit 
 git zsh vim-python3 python-pip 
+xorg-server xorg-xdm xorg-xinit 
 qiv abs dmenu rxvt-unicode yajl
 EOF
 
