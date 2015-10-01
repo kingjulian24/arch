@@ -20,6 +20,7 @@ Download Arch Linux [here](https://www.archlinux.org/download/) and
 [hd3]: ./img/hd3.jpg "HARD DISK STORAGE TYPE"
 [hd4]: ./img/hd4.jpg "HARD DISK LOCATION AND SIZE"
 [efi]: ./img/efi.jpg "ENABLE EFI"
+[vid]: ./img/vid.jpg "INCREASE VIDEO MEMORY"
 [iso]: ./img/iso.jpg "LOAD ARCH ISO"
 
 # Virtual Box
@@ -62,6 +63,11 @@ I'm use to having a UEFI boot partition so that's what I'll be installing.
  **Enable EFI (special OSes only)**. Hit **Ok** when finished.
 
 ![Enable efi in the virtual settings under system tab][efi]
+
+Increase the video memory to whatever value you desire. VirtualBox supports either
+ 2D or 3D acceleration, not both.
+
+![Increase video memory under display tab][vid]
 
 Start the virtual. VirtualBox will ask you to privide the arch _.iso_ file to boot from.
 
@@ -142,7 +148,6 @@ sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_i
 ```
 
 ### Post Installation
-[Post Installation](./ArchLinux/PostInstallation/README.md)
 
 #### VirtualBox Utils
 
@@ -162,7 +167,9 @@ EOF
 
 ```
 cp -f arch/config/xdm/Xresources /etc/X11/xdm/Xresources
+
 systemctl enable xdm
+
 mkdir /usr/local/share/wallpapers
 
 cat > /etc/X11/xdm/Xsetup_0 <<EOF
