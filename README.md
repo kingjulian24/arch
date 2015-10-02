@@ -111,9 +111,11 @@ Use `lsblk` again to verify the changes made.
 
 ![List block devices after partitioning][post]
 
-Format the partitions with `mkfs`.
- * The boot partition will be formatted as **vfat 32** to support **EFI**.
- * The root partition will be formatted as **ext4**.
+Format the partitions:
+ * boot partition will be formatted to vfat
+ * root partition will be formatted to ext4
+[Learn more here!](https://wiki.archlinux.org/index.php/File_systems)
+![List block devices after partitioning][frmt]
 
 ```
 mkfs.vfat -F32 /dev/sda1
