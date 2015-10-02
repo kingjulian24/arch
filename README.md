@@ -27,50 +27,50 @@ Download Arch Linux [here](https://www.archlinux.org/download/) and
 ## Creating The Guest Machine
 Open the VirtualBox application and create a new virtual machine.
 
-<img src="./img/new.jpg" title="NEW VIRTUAL" alt="Create a new virtual" width="500"/>
+<img src="./img/new.jpg" alt="Create a new virtual" width="500"/>
 
 Enter a name for the virtual machine. Select **Linux** for the type and 
  **Arch Linux (64-bit)** for the version.
 
-![Name is arch, type is Linux, version is Arch Linux (64-bit)][os]
+<img src="./img/os.jpg" alt="Name is arch, type is Linux, version is Arch Linux (64-bit)" width="500"/>
 
 Select an amount of memory to allocate to the virtual machine while it's powered on.
 
-![Allocate memorty for virtual][mem]
+<img src="./img/mem.jpg" alt="Allocate memorty for virtual" width="500"/>
 
 Create a new hard disk.
 
-![Create or select existing hard disk if needed][hd1]
+<img src="./img/hd1.jpg" alt="Create or select existing hard disk if needed" width="500"/>
 
 For our purposes we're using **VDI (VirtualBox Disk Image)** as a hard disk type.
 
-![Select hard disk type if new][hd2]
+<img src="./img/hd2.jpg" alt="Select hard disk type if new" width="500"/>
 
 Select if you want your hard disk to be a fixed size on the host or dynamically allocated.
  * Fixed size will allocate a folder the size of the hard disk on the host.
  * Dynamically allocated will grow in size as the guest os get's bigger but never shrink.
 
-![Set storage type: dynamic or fixed][hd3]
+<img src="./img/hd3.jpg" alt="Set storage type: dynamic or fixed" width="500"/>
 
 Name and set the size of the hard disk folder being created on the host.
 
-![Name virtual file and set max size][hd4]
+<img src="./img/hd4.jpg" alt="Name virtual file and set max size" width="500"/>
 
 We'll be creating a [UEFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) 
  boot partition.  We need to tell VirtualBox to boot with EFI. Select the newly 
  created virtual and click on Settings at the top. Navigate to the system tab and 
  check **Enable EFI (special OSes only)**. Hit **Ok** when finished.
 
-![Enable efi in the virtual settings under system tab][efi]
+<img src="./img/efi.jpg" alt="Enable efi in the virtual settings under system tab" width="500"/>
 
 Increase the video memory to whatever value you desire. VirtualBox supports either
  2D or 3D acceleration, not both.
 
-![Increase video memory under display tab][vid]
+<img src="./img/vid.jpg" alt="Increase video memory under display tab" width="500"/>
 
 Start the virtual. VirtualBox will ask you to privide the arch _.iso_ file to boot from.
 
-![Start virtual and load iso][iso]
+<img src="./img/iso.jpg" alt="Start virtual and load iso" width="500"/>
 
 ### Base Installation
 [boot]:  ./img/boot.jpg  "BOOT TO ISO"
