@@ -12,7 +12,6 @@ Download Arch Linux [here](https://www.archlinux.org/download/) and
  read the [beginner's guide](https://wiki.archlinux.org/index.php/Beginners'_guide).
 
 ### Virtual Machine
-[new]: ./img/new.jpg "NEW VIRTUAL"
 [os]:  ./img/os.jpg  "ARCH GUEST"
 [mem]: ./img/mem.jpg "ALLOCATE MEMORY"
 [hd1]: ./img/hd1.jpg "NEW HARD DISK"
@@ -28,7 +27,7 @@ Download Arch Linux [here](https://www.archlinux.org/download/) and
 ## Creating The Guest Machine
 Open the VirtualBox application and create a new virtual machine.
 
-![Create a new virtual][new]
+<img src="./img/new.jpg" title="NEW VIRTUAL" alt="Create a new virtual" width="100"/>
 
 Enter a name for the virtual machine. Select **Linux** for the type and 
  **Arch Linux (64-bit)** for the version.
