@@ -57,10 +57,10 @@ Name and set the size of the hard disk folder being created on the host.
 
 ![Name virtual file and set max size][hd4]
 
-I'm use to having a UEFI boot partition so that's what I'll be installing. 
- We need to tell VirtualBox to boot with EFI. Select the newly created virtual 
- and click on Settings at the top. Navigate to the system tab and check 
- **Enable EFI (special OSes only)**. Hit **Ok** when finished.
+We'll be creating a [UEFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) 
+ boot partition.  We need to tell VirtualBox to boot with EFI. Select the newly 
+ created virtual and click on Settings at the top. Navigate to the system tab and 
+ check **Enable EFI (special OSes only)**. Hit **Ok** when finished.
 
 ![Enable efi in the virtual settings under system tab][efi]
 
@@ -86,9 +86,13 @@ After you start the virtual, you will need to boot to the iso.
 
 ![Boot to iso][boot]
 
-Use `lsblk` to get the a list of block devices.
- You should see one you created as _sda_ with the type **DISK**.
- Start partitioning it with `cgdisk /dev/sda`.
+Use [lsblk](http://linux.die.net/man/8/lsblk) to get the a list of block devices.
+ You should see one you created in VirtualBox as _sda_ with the type **DISK**.
+ Start partitioning it with [cgdisk](http://rodsbooks.com/gdisk/cgdisk.html).
+ We use cgdisk because we need to have a [GPT](https://en.wikipedia.org/wiki/GUID_Partition_Table) 
+ layout for our EFI boot partition.
+
+[Linux Docs - GPT (GUID Partitioning Table)](https://en.wikipedia.org/wiki/GUID_Partition_Table)
 
 ![List block devices before partitioning][pre]
 
@@ -103,9 +107,11 @@ Use `lsblk` to get the a list of block devices.
  * default hex code
  * partition name = ARCH
 
-![Partition disk][part]
-
 _Note: partition names do not have to be 'EFI' or 'ARCH'_
+
+[Arch Wiki - Partitioning](https://wiki.archlinux.org/index.php/Partitioning)
+
+![Partition disk][part]
 
 Use `lsblk` again to verify the changes made.
 
