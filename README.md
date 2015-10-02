@@ -1,30 +1,15 @@
 # Arch Linux Guest In VirtualBox
 
 ## Getting Started
-Before doing anything, download VirtualBox and an iso for Arch Linux.
+Before doing anything, download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) 
+ and an [Arch Linux iso](https://www.archlinux.org/download/).
 
-### VirtualBox
-Download VirtualBox [here](https://www.virtualbox.org/wiki/Downloads) and
- read the [documentation](https://www.virtualbox.org/manual/UserManual.html).
+[VirtualBox Documentation](https://www.virtualbox.org/manual/UserManual.html)
+[Arch Linux Wiki](https://wiki.archlinux.org/)
 
-### Arch Linux
-Download Arch Linux [here](https://www.archlinux.org/download/) and
- read the [beginner's guide](https://wiki.archlinux.org/index.php/Beginners'_guide).
+## VirtualBox
 
-### Virtual Machine
-[os]:  ./img/os.jpg  "ARCH GUEST"
-[mem]: ./img/mem.jpg "ALLOCATE MEMORY"
-[hd1]: ./img/hd1.jpg "NEW HARD DISK"
-[hd2]: ./img/hd2.jpg "HARD DISK TYPE"
-[hd3]: ./img/hd3.jpg "HARD DISK STORAGE TYPE"
-[hd4]: ./img/hd4.jpg "HARD DISK LOCATION AND SIZE"
-[efi]: ./img/efi.jpg "ENABLE EFI"
-[vid]: ./img/vid.jpg "INCREASE VIDEO MEMORY"
-[iso]: ./img/iso.jpg "LOAD ARCH ISO"
-
-# Virtual Box
-
-## Creating The Guest Machine
+### Creating The Virtual Machine
 Open the VirtualBox application and create a new virtual machine.
 
 <img src="./img/new.jpg" alt="Create a new virtual" width="500"/>
@@ -56,6 +41,7 @@ Name and set the size of the hard disk folder being created on the host.
 
 <img src="./img/hd4.jpg" alt="Name virtual file and set max size" width="500"/>
 
+### Additional Settings
 We'll be creating a [UEFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) 
  boot partition.  We need to tell VirtualBox to boot with EFI. Select the newly 
  created virtual and click on Settings at the top. Navigate to the system tab and 
@@ -72,28 +58,21 @@ Start the virtual. VirtualBox will ask you to privide the arch _.iso_ file to bo
 
 <img src="./img/iso.jpg" alt="Start virtual and load iso" width="500"/>
 
+## Arch Linux
 ### Base Installation
-[boot]:  ./img/boot.jpg  "BOOT TO ISO"
-[pre]:   ./img/pre.jpg   "BLOCK DEVICES BEFORE PARTITIONING"
-[part]:  ./img/part.jpg  "PARTITIONING"
-[post]:  ./img/post.jpg  "BLOCK DEVICES AFTER PARTITIONING"
-[frmt]:  ./img/frmt.jpg  "FORMATTING PARTITIONS"
-[wheel]: ./img/wheel.jpg "EDIT PERMISSIONS FOR WHEEL GROUP"
-[urxvt]: ./img/urxvt.jpg "CHANGE DWM DEFAULT TERMINAL"
+After you start the virtual, you will need to boot to the iso. Most of these steps
+ are taken directly from the Arch Wiki's
+ [Beginner's Guide](https://wiki.archlinux.org/index.php/Beginners'_guide).
 
-After you start the virtual, you will need to boot to the iso.
-
-![Boot to iso][boot]
+<img src="./img/boot.jpg" alt="Boot to iso" width="500"/>
 
 Use [lsblk](http://linux.die.net/man/8/lsblk) to get the a list of block devices.
  You should see one you created in VirtualBox as _sda_ with the type **DISK**.
  Start partitioning it with [cgdisk](http://rodsbooks.com/gdisk/cgdisk.html).
  We use cgdisk because we need to have a [GPT](https://en.wikipedia.org/wiki/GUID_Partition_Table) 
- layout for our boot partition.
+ layout for our boot partition. Read more on [partitioning](https://wiki.archlinux.org/index.php/Partitioning).
 
-[Linux Docs - GPT (GUID Partitioning Table)](https://en.wikipedia.org/wiki/GUID_Partition_Table)
-
-![List block devices before partitioning][pre]
+<img src="./img/pre.jpg" alt="List block devices before partitioning" width="500"/>
 
 1. First, the boot partition (_/dev/sda1_):
  * default sector
@@ -108,13 +87,13 @@ Use [lsblk](http://linux.die.net/man/8/lsblk) to get the a list of block devices
 
 _Note: partition names do not have to be 'EFI' or 'ARCH'_
 
-[Arch Wiki - Partitioning](https://wiki.archlinux.org/index.php/Partitioning)
+[Arch Wiki - Partitioning]
 
-![Partition disk][part]
+<img src="./img/part.jpg" alt="Partition disk" width="500"/>
 
 Use `lsblk` again to verify the changes made.
 
-![List block devices after partitioning][post]
+<img src="./img/post.jpg" alt="List block devices after partitioning" width="500"/>
 
 We need to create our [file systems](https://wiki.archlinux.org/index.php/File_systems) 
  by formatting the partitions.
@@ -125,7 +104,7 @@ We need to create our [file systems](https://wiki.archlinux.org/index.php/File_s
 mkfs.vfat -F32 /dev/sda1
 mkfs.ext4 /dev/sda2
 ```
-![Formatting with vfat on /dev/sda1 and ext4 on /dev/sda2][frmt]
+<img src="./img/frmt.jpg" alt="Formatting with vfat on /dev/sda1 and ext4 on /dev/sda2" width="500"/>
 
 Mount the partitions with `mount`.
 
