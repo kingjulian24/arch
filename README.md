@@ -28,7 +28,7 @@ Download Arch Linux [here](https://www.archlinux.org/download/) and
 ## Creating The Guest Machine
 Open the VirtualBox application and create a new virtual machine.
 
-![Create a new virtual][new]
+![Create a new virtual][new =150]
 
 Enter a name for the virtual machine. Select **Linux** for the type and 
  **Arch Linux (64-bit)** for the version.
