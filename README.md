@@ -115,10 +115,13 @@ Format the partitions with `mkfs`.
  * The boot partition will be formatted as **vfat 32** to support **EFI**.
  * The root partition will be formatted as **ext4**.
 
+[Arch Wiki - File Systems](https://wiki.archlinux.org/index.php/File_systems)
+
 ```
 mkfs.vfat -F32 /dev/sda1
 mkfs.ext4 /dev/sda2
 ```
+![Formatting with vfat on /dev/sda1 and ext4 on /dev/sda2][frmt]
 
 Mount the partitions with `mount`.
 
