@@ -5,6 +5,7 @@ Before doing anything, download [VirtualBox](https://www.virtualbox.org/wiki/Dow
  and an [Arch Linux iso](https://www.archlinux.org/download/).
 
 [VirtualBox Documentation](https://www.virtualbox.org/manual/UserManual.html)
+
 [Arch Linux Wiki](https://wiki.archlinux.org/)
 
 ## VirtualBox
@@ -60,6 +61,7 @@ Start the virtual. VirtualBox will ask you to privide the arch _.iso_ file to bo
 
 ## Arch Linux
 ### Base Installation
+#### Detailed Instructions
 After you start the virtual, you will need to boot to the iso. Most of these steps
  are taken directly from the Arch Wiki's
  [Beginner's Guide](https://wiki.archlinux.org/index.php/Beginners'_guide).
@@ -130,6 +132,16 @@ Chroot into _/mnt_ and run the base installation script. This script will finish
 
 ```
 arch-chroot /mnt /bin/bash
+sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
+```
+
+#### Quick Install
+The quick install script will use [sgdisk](http://rodsbooks.com/gdisk/sgdisk.html)
+ instead of cgdisk to partition /dev/sda. It will also take care of partitioning,
+ installing base and base-devel, and generating the fstab. After the script is
+ complete, chroot into /mnt and continue.
+
+```
 sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
 ```
 
