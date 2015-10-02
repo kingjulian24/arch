@@ -90,7 +90,7 @@ Use [lsblk](http://linux.die.net/man/8/lsblk) to get the a list of block devices
  You should see one you created in VirtualBox as _sda_ with the type **DISK**.
  Start partitioning it with [cgdisk](http://rodsbooks.com/gdisk/cgdisk.html).
  We use cgdisk because we need to have a [GPT](https://en.wikipedia.org/wiki/GUID_Partition_Table) 
- layout for our EFI boot partition.
+ layout for our boot partition.
 
 [Linux Docs - GPT (GUID Partitioning Table)](https://en.wikipedia.org/wiki/GUID_Partition_Table)
 
@@ -117,11 +117,10 @@ Use `lsblk` again to verify the changes made.
 
 ![List block devices after partitioning][post]
 
-Format the partitions with `mkfs`.
- * The boot partition will be formatted as **vfat 32** to support **EFI**.
- * The root partition will be formatted as **ext4**.
-
-[Arch Wiki - File Systems](https://wiki.archlinux.org/index.php/File_systems)
+We need to create our [file systems](https://wiki.archlinux.org/index.php/File_systems) 
+ by formatting the partitions.
+ * boot partition will be vfat
+ * root partition will be ext4
 
 ```
 mkfs.vfat -F32 /dev/sda1
