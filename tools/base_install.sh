@@ -1,78 +1,14 @@
 #!/bin/bash
-cd /tmp 
+sgdisk -og /dev/sda
 
-# packages
-read -r -d '' PKGS <<'EOF'
-git zsh vim-python3 python-pip 
-xorg-server xorg-xdm xorg-xinit 
-qiv abs dmenu rxvt-unicode yajl
-EOF
+ENDSECTOR=`sgdisk -E /dev/sda`
 
-pacman -S --noconfirm $PKGS 
+sgdisk -n 1:2048:1050623        -c 1:"EFI"   -t 1:EF00 /dev/sda
+sgdisk -n 2:1050623:$ENDSECTOR  -c 2:"ARCH"  -t 2:8300 /dev/sda
 
+mkfs.vfat -F32 /dev/sda1
+mkfs.ext4      /dev/sda2
 
-# boot loader
-read -r -d '' ARCH <<'EOF'
-title Arch Linux
-linux /vmlinuz-linux
-initrd /initramfs-linux.img
-options root=/dev/sda2 rw
-EOF
+pacstrap /mnt base base-devel
 
-read -r -d '' BOOT <<'EOF'
-default arch
-timeout 3
-EOF
-
-bootctl install
-
-echo "$ARCH" > /boot/loader/entries/arch.conf 
-echo "$BOOT" > /boot/loader/loader.conf
-
-
-# enable network
-systemctl enable dhcpcd@enp0s3.service
-
-
-# locale
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
-echo "localhost" > /etc/hostname
-
-locale-gen 
-
-
-# timezone
-ln -s /usr/share/zoneinfo/US/Central /etc/localtime
-
-
-# hardware clock
-hwclock --systohc --utc
-
-
-# create user for non-root tasks
-read -r -d '' CMNDS <<'EOF'
-git clone https://aur.archlinux.org/package-query.git
-cd package-query
-makepkg -i --noconfirm
-
-git clone https://aur.archlinux.org/yaourt.git
-cd yaourt
-makepkg -i --noconfirm
-EOF
-
-cp /etc/sudoers /etc/sudoers.bkp
-
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-useradd -m -G wheel -s /bin/bash arch-user
-
-su arch-user -c "$CMNDS"
-
-userdel arch-user
-
-mv /etc/sudoers.bkp /etc/sudoers
-
-
-# initramfs
-mkinitcpio -p linux
+genfstab -U -p /mnt >> /mnt/etc/fstab
