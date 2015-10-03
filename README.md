@@ -231,12 +231,13 @@ sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_i
 ```
 
 ### Desktop
-#### Arch Packages
+#### Detailed Instructions
+##### Arch Packages
 ```
 pacman -S --noconfirm git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
 ```
 
-#### VirtualBox Utils
+##### VirtualBox Utils
 ```
 yaourt virtualbox-guest-utils
 
@@ -249,7 +250,7 @@ vboxvideo
 EOF
 ```
 
-#### XDM
+##### XDM
 ```
 cp -f arch/config/xdm/Xresources /etc/X11/xdm/Xresources
 
@@ -262,7 +263,78 @@ cat > /etc/X11/xdm/Xsetup_0 <<EOF
 EOF
 ```
 
-#### DWM
+##### DWM
 ```
 sudo abs community/dwm
+```
+
+#### Quick Install
+```
+sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/desktop_install.sh)"
+```
+
+### User Setup
+Before going forward, set password for root:
+```
+passwd
+```
+
+Create your user and set the password:
+```
+useradd -m -G wheel -s /bin/bash username
+passwd username
+```
+
+Become the newly created user and enter their home directory:
+```
+su username
+cd ~
+```
+
+#### Detailed Instructions
+##### Clone Project
+```
+git clone --depth=1 https://githib.com/nelsonripoll/arch.git ~/arch
+```
+
+##### Xinitrc
+```
+cp arch/config/x11/xinitrc ~/.xinitrc
+```
+
+##### Xresources for Urxvt
+```
+cp arch/config/x11/Xresources ~/.Xresources
+```
+
+##### Solarized Directory Colors
+```
+cp arch/config/solarized/solarized_dark.dir_colors ~/.dir_colors
+```
+
+##### ZShell
+```
+git clone --depth https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+
+cp arch/config/zshell/zshrc ~/.zshrc
+```
+
+##### Vim
+```
+mkdir -pv ~/.vim/colors ~/.vim/bundle
+
+git clone --depth=1 https://github.com/VundleVim/vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+cp arch/config/vim/vimrc ~/.vimrc
+cp arch/config/solarized/solarized_dark.vim ~/.vim/colors/solarized.vim
+```
+
+##### DWM 
+```
+cp -fr /var/abs/community/dwm ~/dwm
+cd ~/dwm
+makepkg -i
+cp -f $DWM ~/dwm/config.h
+makepkg -g >> PKGBUILD
+makepkg -efi
 ```
