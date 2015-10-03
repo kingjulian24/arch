@@ -141,7 +141,103 @@ Have these steps perform automatically:
 sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
 ```
 
-### Post Installation
+#### Post Installation
+##### Detailed Instructions
+Arch Linux is installed but it's not quite ready to boot to just yet. Chroot into
+ the root partition to finish up the base installation.
+
+###### Arch Packages
+```
+pacman -S --noconfirm git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
+```
+
+###### Boot Loader
+```
+bootctl install
+
+cat > /boot/loader/entries/arch.conf <<EOF
+title Arch Linux
+linux /vmlinuz-linux
+initrd /initramfs-linux.img
+options root=/dev/sda2 rw
+EOF
+
+cat > /boot/loader/loader.conf <<EOF
+default arch
+timeout 3
+EOF
+```
+
+###### Locale
+```
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+
+locale-gen
+```
+
+###### Timezone
+```
+ln -s /usr/share/zoneinfo/US/Central /etc/localtime
+```
+
+###### Hardware Clock
+```
+hwclock --systohc --utc
+```
+
+###### Hostname
+```
+echo "localhost" > /etc/hostname
+```
+
+###### Network
+```
+systemctl enable dhcpcd@enp0s3.service
+```
+
+###### Yaourt
+[Yaourt](https://wiki.archlinux.org/index.php/Yaourt) is a third-party script
+ that acts as a wrapper for pacman and makes installing packages from the 
+ [AUR](https://wiki.archlinux.org/index.php/Arch_User_Repository). The root 
+ user is not allowed to make packages for installing packages from the AUR.
+ Create a dummy user in the wheel group and edit the sudoers file to allow wheel
+ users to run all commands. Clean up afterwards.
+```
+read -r -d '' CMNDS <<'EOF'
+git clone https://aur.archlinux.org/package-query.git
+cd package-query
+makepkg -i --noconfirm
+
+git clone https://aur.archlinux.org/yaourt.git
+cd yaourt
+makepkg -i --noconfirm
+EOF
+
+cp /etc/sudoers /etc/sudoers.bkp
+
+echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+useradd -m -G wheel -s /bin/bash arch-user
+
+su arch-user -c "$CMNDS"
+
+userdel arch-user
+
+mv /etc/sudoers.bkp /etc/sudoers
+```
+
+###### Initial Ramdisk
+```
+mkinitcpio -p linux
+```
+
+##### Quick Install
+```
+sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"
+```
+
+### Other
 #### VirtualBox Utils
 ```
 yaourt virtualbox-guest-utils
