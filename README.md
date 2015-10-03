@@ -197,13 +197,16 @@ systemctl enable dhcpcd@enp0s3.service
  Create a dummy user in the wheel group and edit the sudoers file to allow wheel
  users to run all commands. Clean up afterwards.
 ```
+pacman -S --noconfirm git yajl
+
 read -r -d '' CMNDS <<'EOF'
-git clone https://aur.archlinux.org/package-query.git
-cd package-query
+
+git clone https://aur.archlinux.org/package-query.git /tmp/package-query
+cd /tmp/package-query
 makepkg -i --noconfirm
 
-git clone https://aur.archlinux.org/yaourt.git
-cd yaourt
+git clone https://aur.archlinux.org/yaourt.git /tmp/package-query
+cd /tmp/yaourt
 makepkg -i --noconfirm
 EOF
 
@@ -234,7 +237,7 @@ sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_i
 #### Detailed Instructions
 ##### Arch Packages
 ```
-pacman -S --noconfirm git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
+pacman -S --noconfirm zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode
 ```
 
 ##### VirtualBox Utils

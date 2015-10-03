@@ -1,4 +1,5 @@
 #!/bin/bash
+pacman -S --noconfirm git yajl
 
 # boot loader
 read -r -d '' ARCH <<'EOF'
