@@ -55,7 +55,7 @@ Increase the video memory to whatever value you desire. VirtualBox supports eith
 
 <img src="./img/vid.jpg" alt="Increase video memory under display tab" width="500"/>
 
-Start the virtual. VirtualBox will ask you to privide the arch _.iso_ file to boot from.
+Create an optical drive under the storage tab and mount the arch iso.
 
 <img src="./img/iso.jpg" alt="Start virtual and load iso" width="500"/>
 
@@ -66,17 +66,12 @@ After you start the virtual, you will need to boot to the iso. Most of these ste
  are taken directly from the Arch Wiki's
  [Beginner's Guide](https://wiki.archlinux.org/index.php/Beginners'_guide).
 
-<img src="./img/boot.jpg" alt="Boot to iso" width="500"/>
-
-For partitioning we'll be using 
-
+##### Partitioning
 Use [lsblk](http://linux.die.net/man/8/lsblk) to get the a list of block devices.
  You should see one you created in VirtualBox as _sda_ with the type **DISK**.
  We'll be partitioning it with [sgdisk](http://rodsbooks.com/gdisk/sgdisk.html).
  We use sgdisk because we need to have a [GPT](https://en.wikipedia.org/wiki/GUID_Partition_Table) 
  layout for our boot partition. Read more on [partitioning](https://wiki.archlinux.org/index.php/Partitioning).
-
-<img src="./img/pre.jpg" alt="List block devices before partitioning" width="500"/>
 
 Partitioning with sgdisk requires you to know which sectors your partitions will
  begin and end. Each sector is a multiple of 2048 (1 MiB), so a 3 GiB partition 
@@ -107,6 +102,7 @@ Use lsblk again to verify the changes made.
 
 <img src="./img/post.jpg" alt="List block devices after partitioning" width="500"/>
 
+##### Format Partitions
 We need to create our [file systems](https://wiki.archlinux.org/index.php/File_systems) 
  by formatting the partitions. The boot partition needs to be FAT32 and root will
  be ext4:
@@ -114,8 +110,8 @@ We need to create our [file systems](https://wiki.archlinux.org/index.php/File_s
 mkfs.vfat -F32 /dev/sda1
 mkfs.ext4 /dev/sda2
 ```
-<img src="./img/frmt.jpg" alt="Formatting with vfat on /dev/sda1 and ext4 on /dev/sda2" width="500"/>
 
+##### Mount Partitions
 Mount the partitions:
 ```
 mount /dev/sda2 /mnt
@@ -123,35 +119,33 @@ mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 ```
 
+##### Install Arch
 Edit the mirror list (_/etc/pacman.d/mirrorlist_) if needed.  Afterwards install 
  the base system on the root partition.
 ```
 pacstrap /mnt base base-devel
+```
+
+##### Generate fstab
+[fstab](https://wiki.archlinux.org/index.php/Fstab)
+```
 genfstab -U -p /mnt >> /mnt/etc/fstab
 ```
 
-Chroot into _/mnt_ and run the base installation script. This script will finish
- installing everything you need to have a basic installation of arch linux like
- like installing an EFI boot loader, setting up the locale and timezone. The
- installation includes installing xorg, git, zshell, dwm, vim, and python.
-
-##### Quick Install
-Have these steps perform automatically:
+#### Quick Install
 ```
 sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
 ```
 
-#### Post Installation
-##### Detailed Instructions
+### Post Installation
+#### Detailed Instructions
 Arch Linux is installed but it's not quite ready to boot to just yet. Chroot into
  the root partition to finish up the base installation.
-
-###### Arch Packages
 ```
-pacman -S --noconfirm git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
+arch-chroot /mnt /bin/bash
 ```
 
-###### Boot Loader
+##### Boot Loader
 ```
 bootctl install
 
@@ -168,7 +162,7 @@ timeout 3
 EOF
 ```
 
-###### Locale
+##### Locale
 ```
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
@@ -176,27 +170,27 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 locale-gen
 ```
 
-###### Timezone
+##### Timezone
 ```
 ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 ```
 
-###### Hardware Clock
+##### Hardware Clock
 ```
 hwclock --systohc --utc
 ```
 
-###### Hostname
+##### Hostname
 ```
 echo "localhost" > /etc/hostname
 ```
 
-###### Network
+##### Network
 ```
 systemctl enable dhcpcd@enp0s3.service
 ```
 
-###### Yaourt
+##### Yaourt
 [Yaourt](https://wiki.archlinux.org/index.php/Yaourt) is a third-party script
  that acts as a wrapper for pacman and makes installing packages from the 
  [AUR](https://wiki.archlinux.org/index.php/Arch_User_Repository). The root 
@@ -227,17 +221,22 @@ userdel arch-user
 mv /etc/sudoers.bkp /etc/sudoers
 ```
 
-###### Initial Ramdisk
+##### Initial Ramdisk
 ```
 mkinitcpio -p linux
 ```
 
-##### Quick Install
+#### Quick Install
 ```
 sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"
 ```
 
-### Other
+### Desktop
+#### Arch Packages
+```
+pacman -S --noconfirm git zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode yajl
+```
+
 #### VirtualBox Utils
 ```
 yaourt virtualbox-guest-utils
@@ -267,9 +266,4 @@ EOF
 #### DWM
 ```
 sudo abs community/dwm
-```
-
-```
-arch-chroot /mnt /bin/bash
-sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
 ```

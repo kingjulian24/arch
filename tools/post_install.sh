@@ -1,15 +1,4 @@
 #!/bin/bash
-cd /tmp 
-
-# packages
-read -r -d '' PKGS <<'EOF'
-git zsh vim-python3 python-pip 
-xorg-server xorg-xdm xorg-xinit 
-qiv abs dmenu rxvt-unicode yajl
-EOF
-
-pacman -S --noconfirm $PKGS 
-
 
 # boot loader
 read -r -d '' ARCH <<'EOF'
@@ -51,6 +40,8 @@ hwclock --systohc --utc
 
 
 # create user for non-root tasks
+cd /tmp
+
 read -r -d '' CMNDS <<'EOF'
 git clone https://aur.archlinux.org/package-query.git
 cd package-query
@@ -76,3 +67,5 @@ mv /etc/sudoers.bkp /etc/sudoers
 
 # initramfs
 mkinitcpio -p linux
+
+cd ~
