@@ -4,16 +4,16 @@
 sgdisk -og /dev/sda
 
 # boot partition
-START_SECTOR=$(sgdisk -F /dev/sda)
+FIRST_SECTOR=$(sgdisk -F /dev/sda)
 
-sgdisk  -n 1:$STARTSECTOR:+512M  -c 1:"EFI"  -t 1:EF00 /dev/sda
+sgdisk  -n 1:$FIRST_SECTOR:+512M  -c 1:"EFI"  -t 1:EF00 /dev/sda
 
 
 # root partition
-START_SECTOR=$(sgdisk -F /dev/sda)
+FIRST_SECTOR=$(sgdisk -F /dev/sda)
   END_SECTOR=$(sgdisk -E /dev/sda)
 
-sgdisk  -n 2:1050623:$ENDSECTOR  -c 2:"ARCH"  -t 2:8300 /dev/sda
+sgdisk  -n 2:$FIRST_SECTOR:$END_SECTOR  -c 2:"ARCH"  -t 2:8300 /dev/sda
 
 
 # format partitions

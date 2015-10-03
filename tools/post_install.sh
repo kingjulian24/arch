@@ -13,7 +13,7 @@ pacman -S --noconfirm $PKGS
 
 # boot loader
 read -r -d '' ARCH <<'EOF'
-title Arch Linux
+title Waffles
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
 options root=/dev/sda2 rw

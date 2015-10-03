@@ -68,58 +68,63 @@ After you start the virtual, you will need to boot to the iso. Most of these ste
 
 <img src="./img/boot.jpg" alt="Boot to iso" width="500"/>
 
+For partitioning we'll be using 
+
 Use [lsblk](http://linux.die.net/man/8/lsblk) to get the a list of block devices.
  You should see one you created in VirtualBox as _sda_ with the type **DISK**.
- Start partitioning it with [cgdisk](http://rodsbooks.com/gdisk/cgdisk.html).
- We use cgdisk because we need to have a [GPT](https://en.wikipedia.org/wiki/GUID_Partition_Table) 
+ We'll be partitioning it with [sgdisk](http://rodsbooks.com/gdisk/sgdisk.html).
+ We use sgdisk because we need to have a [GPT](https://en.wikipedia.org/wiki/GUID_Partition_Table) 
  layout for our boot partition. Read more on [partitioning](https://wiki.archlinux.org/index.php/Partitioning).
 
 <img src="./img/pre.jpg" alt="List block devices before partitioning" width="500"/>
 
-1. First, the boot partition (_/dev/sda1_):
- * default sector
- * size = 512M
- * hex code = ef00
- * partition name = EFI
-2. Next is the root partition (_/dev/sda2_) :
- * default sector
- * default size
- * default hex code
- * partition name = ARCH
+Partitioning with sgdisk requires you to know which sectors your partitions will
+ begin and end. Each sector is a multiple of 2048 (1 MiB), so a 3 GiB partition 
+ will be roughly 6291455 sectors. Luckily sgdisk can do the calculations for us.
+ Using the -F and -E options we can determine the first and last sectors available.
+ Also, a size can be specified instead of an end sector.
 
+Boot Partition - get the first sector available and create a 512 MiB EFI partition:
+```
+START_SECTOR=$(sgdisk -F /dev/sda)
+
+sgdisk  -n 1:$START_SECTOR:+512M  -c 1:"EFI"  -t 1:EF00 /dev/sda
+```
+
+Root Partition - get the next and last sector available after the boot partition
+ and create the root partition:
+```
+START_SECTOR=$(sgdisk -F /dev/sda)
+  END_SECTOR=$(sgdisk -E /dev/sda)
+
+sgdisk  -n 2:$START_SECTOR:$END_SECTOR  -c 2:"ARCH"  -t 2:8300 /dev/sda
+```
 _Note: partition names do not have to be 'EFI' or 'ARCH'_
-
-[Arch Wiki - Partitioning]
 
 <img src="./img/part.jpg" alt="Partition disk" width="500"/>
 
-Use `lsblk` again to verify the changes made.
+Use lsblk again to verify the changes made.
 
 <img src="./img/post.jpg" alt="List block devices after partitioning" width="500"/>
 
 We need to create our [file systems](https://wiki.archlinux.org/index.php/File_systems) 
- by formatting the partitions.
- * boot partition will be vfat
- * root partition will be ext4
-
+ by formatting the partitions. The boot partition needs to be FAT32 and root will
+ be ext4:
 ```
 mkfs.vfat -F32 /dev/sda1
 mkfs.ext4 /dev/sda2
 ```
 <img src="./img/frmt.jpg" alt="Formatting with vfat on /dev/sda1 and ext4 on /dev/sda2" width="500"/>
 
-Mount the partitions with `mount`.
-
+Mount the partitions:
 ```
 mount /dev/sda2 /mnt
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 ```
 
-Edit the mirror list (_/etc/pacman.d/mirrorlist_) if needed.
- Afterwards install the base system on the root partition with `pacstrap`.
- You can use the flag interactive flag **-i** to prevent auto-confirmation of packages.
-
+Edit the mirror list (_/etc/pacman.d/mirrorlist_) if needed.  Afterwards install 
+ the base system on the root partition.
 ```
 pacstrap /mnt base base-devel
 genfstab -U -p /mnt >> /mnt/etc/fstab
@@ -130,25 +135,14 @@ Chroot into _/mnt_ and run the base installation script. This script will finish
  like installing an EFI boot loader, setting up the locale and timezone. The
  installation includes installing xorg, git, zshell, dwm, vim, and python.
 
-```
-arch-chroot /mnt /bin/bash
-sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
-```
-
-#### Quick Install
-The quick install script will use [sgdisk](http://rodsbooks.com/gdisk/sgdisk.html)
- instead of cgdisk to partition /dev/sda. It will also take care of partitioning,
- installing base and base-devel, and generating the fstab. After the script is
- complete, chroot into /mnt and continue.
-
+##### Quick Install
+Have these steps perform automatically:
 ```
 sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
 ```
 
 ### Post Installation
-
 #### VirtualBox Utils
-
 ```
 yaourt virtualbox-guest-utils
 
@@ -162,7 +156,6 @@ EOF
 ```
 
 #### XDM
-
 ```
 cp -f arch/config/xdm/Xresources /etc/X11/xdm/Xresources
 
@@ -176,7 +169,11 @@ EOF
 ```
 
 #### DWM
-
 ```
 sudo abs community/dwm
+```
+
+```
+arch-chroot /mnt /bin/bash
+sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/base_install.sh)"
 ```
