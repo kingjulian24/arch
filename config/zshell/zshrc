@@ -11,7 +11,7 @@ source $ZSH/oh-my-zsh.sh
 
 unset RPROMPT
 
-eval `dircolors ~/.dircolors`
+eval `dircolors ~/.dir_colors`
 
 alias mkdir='mkdir -pv'
 alias cp='cp -v'
