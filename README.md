@@ -96,11 +96,10 @@ sgdisk  -n 2:$START_SECTOR:$END_SECTOR  -c 2:"ARCH"  -t 2:8300 /dev/sda
 ```
 _Note: partition names do not have to be 'EFI' or 'ARCH'_
 
-<img src="./img/part.jpg" alt="Partition disk" width="500"/>
-
-Use lsblk again to verify the changes made.
-
-<img src="./img/post.jpg" alt="List block devices after partitioning" width="500"/>
+Verify changes made:
+```
+sgdisk -p /dev/sda
+```
 
 ##### Format Partitions
 We need to create our [file systems](https://wiki.archlinux.org/index.php/File_systems) 
