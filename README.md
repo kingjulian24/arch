@@ -283,15 +283,13 @@ sudo echo "$VBU" /etc/modules-load.d/virtualbox.conf
 
 ### XDM
 ```
-cp -f /tmp/arch/config/xdm/Xresources /etc/X11/xdm/Xresources
+sudo cp -f /tmp/arch/config/xdm/Xresources /etc/X11/xdm/Xresources
 
-systemctl enable xdm
+sudo systemctl enable xdm
 
-mkdir /usr/local/share/wallpapers
+sudo mkdir /usr/local/share/wallpapers
 
-cat > /etc/X11/xdm/Xsetup_0 <<EOF
-/usr/bin/qiv -zr /usr/local/share/wallpapers/*
-EOF
+sudo sh -c 'echo "/usr/bin/qiv -zr /usr/local/share/wallpapers/*" > /etc/X11/xdm/Xsetup_0'
 ```
 
 ### DWM
