@@ -1,7 +1,7 @@
 #!/bin/bash
 cd /tmp
 git clone --depth=1 https://github.com/nelsonripoll/arch.git
-ARCH=/tmp/arch/config
+
 
 # packages
 read -r -d '' PKGS <<'EOF'
@@ -10,7 +10,17 @@ xorg-server xorg-xdm xorg-xinit
 qiv abs dmenu rxvt-unicode yajl
 EOF
 
-sudo pacman -S --noconfirm $PKGS 
+sudo sudo pacman -S --noconfirm $PKGS 
+
+
+# yaourt
+git clone https://aur.archlinux.org/package-query.git /tmp/package-query
+cd /tmp/package-query
+makepkg -i --noconfirm
+
+git clone https://aur.archlinux.org/yaourt.git /tmp/package-query
+cd /tmp/yaourt
+makepkg -i --noconfirm
 
 
 #virtualbox guest utils
@@ -22,9 +32,25 @@ EOF
 
 yaourt virtualbox-guest-utils
 
-modprobe -a vboxguest vboxsf vboxvideo
+sudo modprobe -a vboxguest vboxsf vboxvideo
 
-echo $VBOX > /etc/modules-load.d/virtualbox.conf
+sudo echo $VBOX > /etc/modules-load.d/virtualbox.conf
+
+
+# xdm
+cp -f /tmp/arch/config/xdm/Xresources /etc/X11/xdm/Xresources
+
+sudo systemctl enable xdm
+
+sudo mkdir /usr/local/share/wallpapers
+
+sudo cp /etc/X11/xdm/Xsetup_0 /etc/X11/xdm/Xsetup_0.backup
+
+sudo sh -c 'echo "/usr/bin/qiv -zr /usr/local/share/wallpapers/*" > /etc/X11/xdm/Xsetup_0'
+
+
+# DWM
+sudo abs community/dwm
 
 
 # powerline
@@ -43,26 +69,6 @@ git clone --depth=1 $POWERLINE_FONTS /tmp/fonts
 mv /tmp/fonts/* /usr/share/fonts/
 
 fc-cache -vf /usr/share/fonts
-
-
-# Xorg
-read -r -d '' XDM <<'EOF'
-/usr/bin/qiv -zr /usr/local/share/wallpapers/*
-EOF
-
-cp -f $ARCH/xdm/Xresources /etc/X11/xdm/Xresources
-
-systemctl enable xdm
-
-mkdir /usr/local/share/wallpapers
-
-cp /etc/X11/xdm/Xsetup_0 /etc/X11/xdm/Xsetup_0.backup
-
-echo $XDM > /etc/X11/xdm/Xsetup_0
-
-
-# DWM
-abs community/dwm
 
 
 rm -rf /tmp/arch
