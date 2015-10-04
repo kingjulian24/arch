@@ -53,8 +53,8 @@ git clone --depth=1 $VUNDLE          /tmp/Vundle.vim
 git clone --depth=1 $OHMYZSH         /tmp/oh-my-zsh
 git clone --depth=1 $POWERLINE_FONTS /tmp/fonts
 
-sudo curl -l $powerline_symbols -o   /tmp/powerlinesymbols.otf
-sudo curl -l $powerline_conf -o      /tmp/11-powerline-symbols.conf
+sudo curl -L $powerline_symbols -o   /tmp/powerlinesymbols.otf
+sudo curl -L $powerline_conf -o      /tmp/11-powerline-symbols.conf
 
 
 # yaourt & vb guest utils
@@ -66,11 +66,11 @@ makepkg -i --noconfirm
 
 yaourt virtualbox-guest-utils
 
-sudo sh -c $VB_SETUP
+sudo sh -c "$VB_SETUP"
 
 
 # xdm
-sudo sh -c $XDM_SETUP
+sudo sh -c "$XDM_SETUP"
 
 
 # dwm
@@ -79,7 +79,7 @@ cp -fr /var/abs/community/dwm ~/dwm
 
 
 # powerline & fonts
-sudo sh -c $POWERLINE_SETUP
+sudo sh -c "$POWERLINE_SETUP"
 
 fc-cache -vf /usr/share/fonts
 
