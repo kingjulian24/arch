@@ -274,14 +274,6 @@ vboxsf
 vboxvideo
 EOF
 
-git clone https://aur.archlinux.org/package-query.git /tmp/package-query
-cd /tmp/package-query
-makepkg -i --noconfirm
-
-git clone https://aur.archlinux.org/yaourt.git /tmp/package-query
-cd /tmp/yaourt
-makepkg -i --noconfirm
-
 yaourt virtualbox-guest-utils
 
 sudo modprobe -a $VBU
