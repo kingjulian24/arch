@@ -59,7 +59,23 @@ Create an optical drive under the storage tab and mount the arch iso.
 
 <img src="./img/iso.jpg" alt="Start virtual and load iso" width="500"/>
 
-## Arch Linux
+## Installing Arch Linux
+This section is split into two parts: base installation and post installation.
+ * Base Installation
+  * Partition
+  * Format
+  * Mount
+  * Install
+  * Fstab
+ * Post Installation
+  * Boot Loader
+  * Locale
+  * Timezone
+  * Hardware Clock
+  * Hostname
+  * Network
+  * Initramfs
+  
 ### Base Installation
 #### Detailed Instructions
 After you start the virtual, you will need to boot to the iso. Most of these steps
@@ -189,7 +205,51 @@ echo "localhost" > /etc/hostname
 systemctl enable dhcpcd@enp0s3.service
 ```
 
-##### Yaourt
+##### Initial Ramdisk
+```
+mkinitcpio -p linux
+```
+
+#### Quick Install
+If you ran the base install script this was already taken care of.
+```
+sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"
+```
+
+## Desktop Environment
+Before going forward, set password for root:
+```
+passwd
+```
+
+Create a new user and set the password:
+```
+useradd -m -G wheel -s /bin/bash username
+passwd username
+```
+
+Give the wheel group sudo access
+```
+cp /etc/sudoers /etc/sudoers.bkp
+
+echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+```
+
+Become the newly created user and enter their home directory:
+```
+su username
+cd ~
+```
+
+### Arch Packages & Project
+```
+sudo pacman -S --noconfirm git yajl zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode
+
+git clone https://github.com/nelsonripoll/arch.git /tmp/arch
+```
+
+### Yaourt & VirtualBox Utils
+#### Yaourt
 [Yaourt](https://wiki.archlinux.org/index.php/Yaourt) is a third-party script
  that acts as a wrapper for pacman and makes installing packages from the 
  [AUR](https://wiki.archlinux.org/index.php/Arch_User_Repository). The root 
@@ -197,9 +257,22 @@ systemctl enable dhcpcd@enp0s3.service
  Create a dummy user in the wheel group and edit the sudoers file to allow wheel
  users to run all commands. Clean up afterwards.
 ```
-pacman -S --noconfirm git yajl
+git clone https://aur.archlinux.org/package-query.git /tmp/package-query
+cd /tmp/package-query
+makepkg -i --noconfirm
 
-read -r -d '' CMNDS <<'EOF'
+git clone https://aur.archlinux.org/yaourt.git /tmp/package-query
+cd /tmp/yaourt
+makepkg -i --noconfirm
+```
+
+#### VirtualBox Utils
+```
+read -r -d '' VBU <<'EOF'
+vboxguest
+vboxsf
+vboxvideo
+EOF
 
 git clone https://aur.archlinux.org/package-query.git /tmp/package-query
 cd /tmp/package-query
@@ -208,54 +281,17 @@ makepkg -i --noconfirm
 git clone https://aur.archlinux.org/yaourt.git /tmp/package-query
 cd /tmp/yaourt
 makepkg -i --noconfirm
-EOF
 
-cp /etc/sudoers /etc/sudoers.bkp
-
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-useradd -m -G wheel -s /bin/bash arch-user
-
-su arch-user -c "$CMNDS"
-
-userdel arch-user
-
-mv /etc/sudoers.bkp /etc/sudoers
-```
-
-##### Initial Ramdisk
-```
-mkinitcpio -p linux
-```
-
-#### Quick Install
-```
-sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"
-```
-
-### Desktop
-#### Detailed Instructions
-##### Arch Packages
-```
-pacman -S --noconfirm zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode
-```
-
-##### VirtualBox Utils
-```
 yaourt virtualbox-guest-utils
 
-modprobe -a vboxguest vboxsf vboxvideo
+sudo modprobe -a $VBU
 
-cat > /etc/modules-load.d/virtualbox.conf <<EOF
-vboxguest
-vboxsf
-vboxvideo
-EOF
+sudo echo "$VBU" /etc/modules-load.d/virtualbox.conf
 ```
 
-##### XDM
+### XDM
 ```
-cp -f arch/config/xdm/Xresources /etc/X11/xdm/Xresources
+cp -f /tmp/arch/config/xdm/Xresources /etc/X11/xdm/Xresources
 
 systemctl enable xdm
 
@@ -266,78 +302,7 @@ cat > /etc/X11/xdm/Xsetup_0 <<EOF
 EOF
 ```
 
-##### DWM
+### DWM
 ```
 sudo abs community/dwm
-```
-
-#### Quick Install
-```
-sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/desktop_install.sh)"
-```
-
-### User Setup
-Before going forward, set password for root:
-```
-passwd
-```
-
-Create your user and set the password:
-```
-useradd -m -G wheel -s /bin/bash username
-passwd username
-```
-
-Become the newly created user and enter their home directory:
-```
-su username
-cd ~
-```
-
-#### Detailed Instructions
-##### Clone Project
-```
-git clone --depth=1 https://githib.com/nelsonripoll/arch.git ~/arch
-```
-
-##### Xinitrc
-```
-cp arch/config/x11/xinitrc ~/.xinitrc
-```
-
-##### Xresources for Urxvt
-```
-cp arch/config/x11/Xresources ~/.Xresources
-```
-
-##### Solarized Directory Colors
-```
-cp arch/config/solarized/solarized_dark.dir_colors ~/.dir_colors
-```
-
-##### ZShell
-```
-git clone --depth https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-
-cp arch/config/zshell/zshrc ~/.zshrc
-```
-
-##### Vim
-```
-mkdir -pv ~/.vim/colors ~/.vim/bundle
-
-git clone --depth=1 https://github.com/VundleVim/vundle.vim.git ~/.vim/bundle/Vundle.vim
-
-cp arch/config/vim/vimrc ~/.vimrc
-cp arch/config/solarized/solarized_dark.vim ~/.vim/colors/solarized.vim
-```
-
-##### DWM 
-```
-cp -fr /var/abs/community/dwm ~/dwm
-cd ~/dwm
-makepkg -i
-cp -f $DWM ~/dwm/config.h
-makepkg -g >> PKGBUILD
-makepkg -efi
 ```
