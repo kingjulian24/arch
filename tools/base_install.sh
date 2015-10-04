@@ -36,4 +36,4 @@ genfstab -U -p /mnt >> /mnt/etc/fstab
 
 
 # post install
-arch-chroot /mnt /bin/bash -c 'sh -c "$(https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"'
+arch-chroot /mnt /bin/bash -c 'sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"'
