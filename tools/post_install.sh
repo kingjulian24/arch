@@ -20,14 +20,11 @@ echo "$ARCH" > /boot/loader/entries/arch.conf
 echo "$BOOT" > /boot/loader/loader.conf
 
 
-# enable network
-systemctl enable dhcpcd@enp0s3.service
-
-
 # locale
+cp /etc/locale.gen /etc/locale.gen.backup
+
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
-echo "localhost" > /etc/hostname
 
 locale-gen 
 
@@ -40,22 +37,35 @@ ln -s /usr/share/zoneinfo/US/Central /etc/localtime
 hwclock --systohc --utc
 
 
-# create user for non-root tasks
+# hostname
+echo "localhost" > /etc/hostname
+
+
+# enable network
+systemctl enable dhcpcd@enp0s3.service
+
+
+# yaourt
 cd /tmp
 
+read -r -d '' SUDOERS <<'EOF'
+root ALL=(ALL) ALL
+%wheel ALL=(ALL) NOPASSWD: ALL
+EOF
+
 read -r -d '' CMNDS <<'EOF'
-git clone https://aur.archlinux.org/package-query.git
-cd package-query
+git clone https://aur.archlinux.org/package-query.git /tmp/package-query
+cd /tmp/package-query
 makepkg -i --noconfirm
 
-git clone https://aur.archlinux.org/yaourt.git
-cd yaourt
+git clone https://aur.archlinux.org/yaourt.git /tmp/yaourt
+cd /tmp/yaourt
 makepkg -i --noconfirm
 EOF
 
-cp /etc/sudoers /etc/sudoers.bkp
+echo $SUDOERS >> /etc/sudoers
 
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+cp /etc/sudoers /etc/sudoers.backup
 
 useradd -m -G wheel -s /bin/bash arch-user
 
@@ -63,7 +73,7 @@ su arch-user -c "$CMNDS"
 
 userdel arch-user
 
-mv /etc/sudoers.bkp /etc/sudoers
+mv /etc/sudoers.backup /etc/sudoers
 
 
 # initramfs
