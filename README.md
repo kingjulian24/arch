@@ -278,7 +278,7 @@ yaourt virtualbox-guest-utils
 
 sudo modprobe -a $VBU
 
-sudo echo "$VBU" /etc/modules-load.d/virtualbox.conf
+sudo echo "$VBU" > /etc/modules-load.d/virtualbox.conf
 ```
 
 ### XDM
@@ -288,6 +288,8 @@ sudo cp -f /tmp/arch/config/xdm/Xresources /etc/X11/xdm/Xresources
 sudo systemctl enable xdm
 
 sudo mkdir /usr/local/share/wallpapers
+
+sudo cp /etc/X11/xdm/Xsetup_0 /etc/X11/xdm/Xsetup_0.backup
 
 sudo sh -c 'echo "/usr/bin/qiv -zr /usr/local/share/wallpapers/*" > /etc/X11/xdm/Xsetup_0'
 ```
