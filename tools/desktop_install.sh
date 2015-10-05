@@ -48,7 +48,7 @@ sudo sudo pacman -S --noconfirm $PACKAGES
 
 git clone --depth=1 $ARCH            /tmp/arch
 git clone --depth=1 $PACKAGE_QUERY   /tmp/package-query
-git clone --depth=1 $YAOURT          /tmp/package-query
+git clone --depth=1 $YAOURT          /tmp/yaourt
 git clone --depth=1 $VUNDLE          /tmp/Vundle.vim
 git clone --depth=1 $OHMYZSH         /tmp/oh-my-zsh
 git clone --depth=1 $POWERLINE_FONTS /tmp/fonts
