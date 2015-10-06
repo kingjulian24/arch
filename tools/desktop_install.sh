@@ -1,4 +1,6 @@
 #!/bin/bash
+cd /tmp
+
            GITHUB="https://github.com"
               AUR="https://aur.archlinux.org"
              ARCH="$GITHUB/nelsonripoll/arch.git"
@@ -11,9 +13,9 @@ POWERLINE_SYMBOLS="$GITHUB/powerline/powerline/raw/develop/font/PowerlineSymbols
            YAOURT="$AUR/yaourt.git"
 
 read -r -d '' PACKAGES <<EOF
-git zsh vim-python3 python-pip 
-xorg-server xorg-xdm xorg-xinit 
-qiv abs dmenu rxvt-unicode yajl
+git zsh vim-python3 python-pip rxvt-unicode  
+xorg-server xorg-xdm xorg-xinit xorg-xdpyinfo
+qiv abs dmenu yajl
 EOF
 
 read -r -d '' XDM_SETUP <<EOF
@@ -44,7 +46,8 @@ EOF
 
 
 # packages
-sudo sudo pacman -S --noconfirm $PACKAGES 
+sudo pacman -Syu --noconfirm
+sudo pacman -S --noconfirm $PACKAGES 
 
 git clone --depth=1 $ARCH            /tmp/arch
 git clone --depth=1 $PACKAGE_QUERY   /tmp/package-query
