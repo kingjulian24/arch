@@ -367,3 +367,13 @@ chsh -s /bin/zsh
 ```
 sudo reboot
 ```
+
+### Results
+xdm login
+<img src="./img/xdm-login.jpg" alt="Create a new virtual" width="500"/>
+urxvt ls
+<img src="./img/urxvt-ls.jpg" alt="Create a new virtual" width="500"/>
+urxvt git
+<img src="./img/urxvt-git.jpg" alt="Create a new virtual" width="500"/>
+urxvt vim
+<img src="./img/urxvt-vim.jpg" alt="Create a new virtual" width="500"/>
