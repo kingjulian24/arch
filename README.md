@@ -210,19 +210,13 @@ systemctl enable dhcpcd@enp0s3.service
 mkinitcpio -p linux
 ```
 
-#### Quick Install
-If you ran the base install script this was already taken care of.
-```
-sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"
-```
-
-## Desktop Environment
-Before going forward, set password for root:
+##### Set root password
 ```
 passwd
 ```
 
-Create a new user and set the password:
+##### Create a user
+Create your user in the wheel group, then set the passwd.
 ```
 useradd -m -G wheel -s /bin/bash username
 passwd username
@@ -230,20 +224,37 @@ passwd username
 
 Give the wheel group sudo access
 ```
-cp /etc/sudoers /etc/sudoers.bkp
+cp /etc/sudoers /etc/sudoers.backup
 
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
 
-Become the newly created user and enter their home directory:
+That's it, you have a bootable linux os. Exit from chroot.
 ```
-su username
-cd ~
+exit
 ```
 
+#### Quick Install
+If you ran the base install script these were already taken care of except the 
+ user creation, setting of passwords, and modifying the permissions.
+```
+sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"
+```
+
+#### Unmount Partitions & Reboot
+Before you reboot, make sure you unmount the partitions. The command is **umount**.
+```
+umount /mnt/boot
+umount /mnt
+
+reboot
+```
+
+## Desktop Environment
+After you boot your machine back up, log in as the created user.
 ### Arch Packages & Project
 ```
-sudo pacman -S --noconfirm git yajl zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit qiv abs dmenu rxvt-unicode
+sudo pacman -S --noconfirm git yajl zsh vim-python3 python-pip xorg-server xorg-xdm xorg-xinit xorg-xdpyinfo qiv abs dmenu rxvt-unicode
 
 git clone https://github.com/nelsonripoll/arch.git /tmp/arch
 ```
@@ -297,4 +308,45 @@ sudo sh -c 'echo "/usr/bin/qiv -zr /usr/local/share/wallpapers/*" > /etc/X11/xdm
 ### DWM
 ```
 sudo abs community/dwm
+
+cp -fr /var/abs/community/dwm ~/dwm
+
+cd ~/dwm
+
+makepkg -i
+```
+
+### Powerline
+```
+git clone --depth=1 https://github.com/powerline/fonts.git /tmp/fonts
+
+curl -L https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf -o   /tmp/powerlinesymbols.otf
+curl -L https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf -o      /tmp/11-powerline-symbols.conf
+
+sudo pip install powerline-status
+sudo mv /tmp/powerlinesymbols.otf /usr/share/fonts/powerlinesymbols.otf
+sudo mv /tmp/11-powerline-symbols.conf /etc/fonts/conf.d/11-powerline-symbols.conf
+sudo mv /tmp/fonts/* /usr/share/fonts/
+
+fc-cache -vf /usr/share/fonts
+```
+
+### Home
+```
+mkdir -pv ~/.vim/colors ~/.vim/bundle
+
+mv -f /tmp/Vundle.vim                                       ~/.vim/bundle/Vundle.vim
+mv -f /tmp/oh-my-zsh                                        ~/.oh-my-zsh
+mv -f /tmp/arch/config/x11/xinitrc                          ~/.xinitrc
+mv -f /tmp/arch/config/x11/Xresources                       ~/.Xresources
+mv -f /tmp/arch/config/solarized/solarized_dark.dir_colors  ~/.dir_colors
+mv -f /tmp/arch/config/zshell/zshrc                         ~/.zshrc
+mv -f /tmp/arch/config/vim/vimrc                            ~/.vimrc
+mv -f /tmp/arch/config/solarized/solarized_dark.vim         ~/.vim/colors/solarized.vim
+mv -f /tmp/arch/config/dwm/config.h ~/dwm/config.h
+
+cd ~/dwm
+
+makepkg -g >> PKGBUILD
+makepkg -ief
 ```

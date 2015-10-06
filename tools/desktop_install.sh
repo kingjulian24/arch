@@ -56,8 +56,8 @@ git clone --depth=1 $VUNDLE          /tmp/Vundle.vim
 git clone --depth=1 $OHMYZSH         /tmp/oh-my-zsh
 git clone --depth=1 $POWERLINE_FONTS /tmp/fonts
 
-sudo curl -L $powerline_symbols -o   /tmp/powerlinesymbols.otf
-sudo curl -L $powerline_conf -o      /tmp/11-powerline-symbols.conf
+curl -L $powerline_symbols -o   /tmp/powerlinesymbols.otf
+curl -L $powerline_conf -o      /tmp/11-powerline-symbols.conf
 
 
 # yaourt & vb guest utils
@@ -100,10 +100,10 @@ mv -f /tmp/arch/config/vim/vimrc                            ~/.vimrc
 mv -f /tmp/arch/config/solarized/solarized_dark.vim         ~/.vim/colors/solarized.vim
 
 cd ~/dwm
-makepkg -i
+makepkg -i --noconfirm
 mv -f /tmp/arch/config/dwm/config.h ~/dwm/config.h
 makepkg -g >> PKGBUILD
-makepkg -ief
+makepkg -ief --noconfirm
 
 
 # go home
