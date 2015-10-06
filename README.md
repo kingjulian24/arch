@@ -241,14 +241,19 @@ If you ran the base install script these were already taken care of except the
 sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/post_install.sh)"
 ```
 
-#### Unmount Partitions & Reboot
-Before you reboot, make sure you unmount the partitions. The command is **umount**.
+#### Unmount Partitions & Shutdown
+Before you shutdown, make sure you unmount the partitions. The command is **umount**.
 ```
 umount /mnt/boot
 umount /mnt
 
-reboot
+shutdown
 ```
+
+### Remove iso
+Remove the optical drive under the storage tab.
+
+<img src="./img/iso2.jpg" alt="Remove optical drive" width="500"/>
 
 ## Desktop Environment
 After you boot your machine back up, log in as the created user.
@@ -318,15 +323,16 @@ makepkg -i
 
 ### Powerline
 ```
-git clone --depth=1 https://github.com/powerline/fonts.git /tmp/fonts
+git clone --depth=1 https://github.com/powerline/fonts.git  /tmp/fonts
 
-curl -L https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf -o   /tmp/powerlinesymbols.otf
-curl -L https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf -o      /tmp/11-powerline-symbols.conf
+curl -L https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf      -o  /tmp/powerlinesymbols.otf
+curl -L https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf -o  /tmp/11-powerline-symbols.conf
 
 sudo pip install powerline-status
-sudo mv /tmp/powerlinesymbols.otf /usr/share/fonts/powerlinesymbols.otf
-sudo mv /tmp/11-powerline-symbols.conf /etc/fonts/conf.d/11-powerline-symbols.conf
-sudo mv /tmp/fonts/* /usr/share/fonts/
+
+sudo mv /tmp/powerlinesymbols.otf       /usr/share/fonts/powerlinesymbols.otf
+sudo mv /tmp/11-powerline-symbols.conf  /etc/fonts/conf.d/11-powerline-symbols.conf
+sudo mv /tmp/fonts/*                    /usr/share/fonts/
 
 fc-cache -vf /usr/share/fonts
 ```
@@ -343,10 +349,21 @@ mv -f /tmp/arch/config/solarized/solarized_dark.dir_colors  ~/.dir_colors
 mv -f /tmp/arch/config/zshell/zshrc                         ~/.zshrc
 mv -f /tmp/arch/config/vim/vimrc                            ~/.vimrc
 mv -f /tmp/arch/config/solarized/solarized_dark.vim         ~/.vim/colors/solarized.vim
-mv -f /tmp/arch/config/dwm/config.h ~/dwm/config.h
+mv -f /tmp/arch/config/dwm/config.h                         ~/dwm/config.h
 
 cd ~/dwm
 
 makepkg -g >> PKGBUILD
 makepkg -ief
+```
+
+### Change shell
+Change your default shell to zshell.
+```
+chsh -s /bin/zsh
+```
+
+### Reboot
+```
+sudo reboot
 ```
