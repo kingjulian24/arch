@@ -67,7 +67,7 @@ makepkg -i --noconfirm
 cd /tmp/yaourt
 makepkg -i --noconfirm
 
-yaourt virtualbox-guest-utils
+yaourt ^virtualbox-guest-utils$
 
 sudo sh -c "$VB_SETUP"
 
