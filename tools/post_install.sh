@@ -2,7 +2,7 @@
 
 # boot loader
 read -r -d '' ARCH <<'EOF'
-title Waffles
+title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
 options root=/dev/sda2 rw
