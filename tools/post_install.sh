@@ -46,3 +46,5 @@ systemctl enable dhcpcd@enp0s3.service
 
 # initramfs
 mkinitcpio -p linux
+
+sh -c "$(curl -fsSL https://raw.github.com/nelsonripoll/arch/master/tools/user_install.sh)"
